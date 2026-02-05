@@ -9,6 +9,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.17.1"
+    "@fontsource-variable/roboto": "^5.2.9",
+    "@fontsource/cinzel": "^5.2.8",
+    "@fontsource/lora": "^5.2.8",
+    "@supabase/supabase-js": "^2.95.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.17.1",
+    "autoprefixer": "^10.4.24",
+    "tailwindcss": "^4.1.18"
   }
 }

@@ -1,0 +1,684 @@
+---
+import ServiceCard from "./ServiceCard.astro";
+import CalendarPicker from "./CalendarPicker.astro";
+import TimeSlots from "./TimeSlots.astro";
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+
+const services = [
+  {
+    id: "corte-cejas",
+    name: "Corte de cabello + cejas",
+    price: 12000,
+    duration: "40 min",
+    description: "Cejas opcionales",
+  },
+  {
+    id: "corte-cejas-barba",
+    name: "Corte + cejas + barba",
+    price: 14000,
+    duration: "40 min",
+  },
+  {
+    id: "perfilado-barba",
+    name: "Perfilado de barba",
+    price: 5000,
+    duration: "5 min",
+  },
+  {
+    id: "perfilado-cejas",
+    name: "Perfilado de cejas",
+    price: 3000,
+    duration: "3 min",
+  },
+  {
+    id: "corte-mechas",
+    name: "Corte + mechas",
+    price: 40000,
+    duration: "2h",
+  },
+  {
+    id: "corte-global",
+    name: "Corte + global",
+    price: 55000,
+    duration: "3h",
+  },
+];
+---
+
+<section id="servicios" class="w-full max-w-4xl mx-auto px-4 py-8" data-supabase-url={supabaseUrl} data-supabase-key={supabaseKey}>
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2">Reserva tu turno</h2>
+    <p class="text-gray-600">Selecciona un servicio para comenzar</p>
+  </div>
+
+  <!-- Progress Indicator -->
+  <div class="flex items-center justify-center mb-8 gap-2">
+    <div id="step-1" class="flex flex-col items-center gap-1 text-gray-800 transition-colors" data-step="1">
+      <span class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all border-gray-800 bg-gray-800 text-white">1</span>
+      <span class="text-xs font-medium">Servicio</span>
+    </div>
+    <div class="w-12 h-0.5 bg-gray-300 mx-2"></div>
+    <div id="step-2" class="flex flex-col items-center gap-1 text-gray-400 transition-colors" data-step="2">
+      <span class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all border-gray-300">2</span>
+      <span class="text-xs font-medium">Fecha</span>
+    </div>
+    <div class="w-12 h-0.5 bg-gray-300 mx-2"></div>
+    <div id="step-3" class="flex flex-col items-center gap-1 text-gray-400 transition-colors" data-step="3">
+      <span class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all border-gray-300">3</span>
+      <span class="text-xs font-medium">Horario</span>
+    </div>
+  </div>
+
+  <!-- Services Grid -->
+  <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
+    {services.map((service) => (
+      <ServiceCard
+        id={service.id}
+        name={service.name}
+        price={service.price}
+        duration={service.duration}
+        description={service.description}
+      />
+    ))}
+  </div>
+
+  <!-- Calendar Picker -->
+  <CalendarPicker />
+
+  <!-- Time Slots -->
+  <TimeSlots />
+
+  <!-- Confirmation Modal -->
+  <div id="confirmation-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in animate-duration-200">
+      <h3 class="text-xl font-bold text-gray-800 mb-4">Confirmar reserva</h3>
+      <div id="booking-summary" class="space-y-3 mb-6">
+        <!-- Summary rendered by JS -->
+      </div>
+      <div class="flex gap-3">
+        <button id="cancel-booking" class="flex-1 py-3 px-4 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+          Cancelar
+        </button>
+        <button id="confirm-booking" class="flex-1 py-3 px-4 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          Confirmar por WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Panel (Hidden by default) -->
+  <div id="admin-panel" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden animate-fade-in animate-duration-200">
+      <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+        <h3 class="text-xl font-bold text-gray-800">Panel de Administración</h3>
+        <button id="close-admin" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
+        <div id="admin-bookings" class="space-y-3">
+          <!-- Bookings list rendered by JS -->
+        </div>
+        <div id="no-bookings" class="hidden text-center text-gray-500 py-8">
+          No hay turnos reservados
+        </div>
+      </div>
+      <div class="p-4 border-t border-gray-200">
+        <button id="clear-all-bookings" class="w-full py-2 px-4 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors">
+          Limpiar todos los turnos
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Admin Access (Triple click on title) -->
+<div id="admin-trigger" class="fixed bottom-4 right-4 opacity-0 hover:opacity-100 transition-opacity">
+  <button id="open-admin" class="text-xs text-gray-400 hover:text-gray-600">
+    Admin
+  </button>
+</div>
+
+
+<script>
+  import { createClient } from '@supabase/supabase-js';
+
+  // ========== SUPABASE SETUP ==========
+  const section = document.getElementById('servicios');
+  const supabaseUrl = section?.dataset.supabaseUrl || '';
+  const supabaseKey = section?.dataset.supabaseKey || '';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // ========== BOOKING SYSTEM ==========
+
+  // Time slots configuration
+  const MORNING_SLOTS = [
+    { start: "10:00", end: "10:40" },
+    { start: "10:40", end: "11:20" },
+    { start: "11:20", end: "12:00" },
+  ];
+
+  const AFTERNOON_SLOTS = [
+    { start: "14:00", end: "14:40" },
+    { start: "14:40", end: "15:20" },
+    { start: "15:20", end: "16:00" },
+    { start: "16:00", end: "16:40" },
+    { start: "16:40", end: "17:20" },
+    { start: "17:20", end: "18:00" },
+    { start: "18:00", end: "18:40" },
+    { start: "18:40", end: "19:20" },
+    { start: "19:20", end: "20:00" },
+  ];
+
+  const WHATSAPP_NUMBER = "5492226532910";
+  const ADMIN_PASSWORD = "kmz2024";
+
+  // State
+  let selectedService: { id: string; name: string; price: number; duration: string } | null = null;
+  let selectedDate: Date | null = null;
+  let selectedTime: string | null = null;
+
+  // ========== SUPABASE FUNCTIONS ==========
+
+  // Obtener todos los turnos
+  async function getBookings(): Promise<Array<{fecha: string; hora: string; servicio: string}>> {
+    const { data, error } = await supabase
+      .from('turnos')
+      .select('fecha, hora, servicio');
+    if (error) {
+      console.error('Error fetching bookings:', error);
+      return [];
+    }
+    return data || [];
+  }
+
+  // Guardar un turno
+  async function saveBooking(fecha: string, hora: string, servicio: string): Promise<boolean> {
+    const { error } = await supabase
+      .from('turnos')
+      .insert([{ fecha, hora, servicio }]);
+    if (error) {
+      console.error('Error saving booking:', error);
+      return false;
+    }
+    return true;
+  }
+
+  // Verificar si un horario está ocupado
+  async function isSlotBooked(fecha: string, hora: string): Promise<boolean> {
+    const { data, error } = await supabase
+      .from('turnos')
+      .select('id')
+      .eq('fecha', fecha)
+      .eq('hora', hora)
+      .maybeSingle();
+    if (error) {
+      console.error('Error checking slot:', error);
+      return false;
+    }
+    return data !== null;
+  }
+
+  // Eliminar un turno (para admin)
+  async function removeBooking(fecha: string, hora: string): Promise<boolean> {
+    const { error } = await supabase
+      .from('turnos')
+      .delete()
+      .eq('fecha', fecha)
+      .eq('hora', hora);
+    if (error) {
+      console.error('Error removing booking:', error);
+      return false;
+    }
+    return true;
+  }
+
+  // Limpiar todos los turnos (para admin)
+  async function clearAllBookings(): Promise<boolean> {
+    const { error } = await supabase
+      .from('turnos')
+      .delete()
+      .neq('id', '00000000-0000-0000-0000-000000000000');
+    return !error;
+  }
+
+  // ========== REALTIME SUBSCRIPTION ==========
+  const channel = supabase
+    .channel('turnos-changes')
+    .on('postgres_changes',
+      { event: '*', schema: 'public', table: 'turnos' },
+      (payload) => {
+        console.log('Cambio en turnos:', payload);
+        // Si hay una fecha seleccionada, re-renderizar los horarios
+        if (selectedDate) {
+          renderTimeSlots(selectedDate);
+        }
+      }
+    )
+    .subscribe();
+
+  // ========== UTILITY FUNCTIONS ==========
+
+  // Format date for display
+  function formatDate(date: Date): string {
+    const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    return `${days[date.getDay()]} ${date.getDate()} de ${months[date.getMonth()]}`;
+  }
+
+  // Format date for storage (YYYY-MM-DD)
+  function formatDateStorage(date: Date): string {
+    return date.toISOString().split("T")[0];
+  }
+
+  // Update step indicators
+  function updateSteps(currentStep: number) {
+    for (let i = 1; i <= 3; i++) {
+      const step = document.getElementById(`step-${i}`);
+      if (step) {
+        const numberEl = step.querySelector("span:first-child");
+
+        // Reset classes
+        step.classList.remove("text-gray-800", "text-green-600", "text-gray-400");
+        numberEl?.classList.remove("border-gray-800", "bg-gray-800", "text-white", "border-green-600", "bg-green-600", "border-gray-300");
+
+        if (i < currentStep) {
+          // Completed
+          step.classList.add("text-green-600");
+          numberEl?.classList.add("border-green-600", "bg-green-600", "text-white");
+        } else if (i === currentStep) {
+          // Active
+          step.classList.add("text-gray-800");
+          numberEl?.classList.add("border-gray-800", "bg-gray-800", "text-white");
+        } else {
+          // Inactive
+          step.classList.add("text-gray-400");
+          numberEl?.classList.add("border-gray-300");
+        }
+      }
+    }
+  }
+
+  // Show specific section
+  function showSection(section: "services" | "calendar" | "timeslots") {
+    const servicesGrid = document.getElementById("services-grid");
+    const calendarPicker = document.getElementById("calendar-picker");
+    const timeSlots = document.getElementById("time-slots");
+
+    servicesGrid?.classList.add("hidden");
+    calendarPicker?.classList.add("hidden");
+    timeSlots?.classList.add("hidden");
+
+    if (section === "services") {
+      servicesGrid?.classList.remove("hidden");
+      updateSteps(1);
+    } else if (section === "calendar") {
+      calendarPicker?.classList.remove("hidden");
+      renderCalendar();
+      updateSteps(2);
+    } else if (section === "timeslots") {
+      timeSlots?.classList.remove("hidden");
+      if (selectedDate) renderTimeSlots(selectedDate);
+      updateSteps(3);
+    }
+  }
+
+  // Render calendar days
+  function renderCalendar() {
+    const container = document.getElementById("calendar-days");
+    if (!container) return;
+
+    container.innerHTML = "";
+    const today = new Date();
+    const days = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+    const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+
+      const dayCard = document.createElement("div");
+      dayCard.className = "flex flex-col items-center justify-center p-3 rounded-xl bg-white border-2 border-gray-200 cursor-pointer transition-all duration-200 ease-out hover:scale-105 hover:shadow-md hover:border-gray-400";
+      dayCard.dataset.date = formatDateStorage(date);
+
+      dayCard.innerHTML = `
+        <span class="text-xs text-gray-500 uppercase tracking-wide">${days[date.getDay()]}</span>
+        <span class="text-xl font-bold text-gray-800">${date.getDate()}</span>
+        <span class="text-xs text-gray-400">${months[date.getMonth()]}</span>
+      `;
+
+      dayCard.addEventListener("click", () => {
+        // Remove previous selection
+        container.querySelectorAll("[data-date]").forEach((card) => {
+          (card as HTMLElement).classList.remove("border-gray-800", "bg-gray-100", "shadow-md");
+          (card as HTMLElement).classList.add("border-gray-200", "bg-white");
+        });
+
+        dayCard.classList.remove("border-gray-200", "bg-white");
+        dayCard.classList.add("border-gray-800", "bg-gray-100", "shadow-md");
+        selectedDate = date;
+        showSection("timeslots");
+      });
+
+      container.appendChild(dayCard);
+    }
+  }
+
+  // Render time slots (async - fetches from Supabase)
+  async function renderTimeSlots(date: Date) {
+    const morningContainer = document.getElementById("morning-slots");
+    const afternoonContainer = document.getElementById("afternoon-slots");
+    const dateDisplay = document.getElementById("selected-date-display");
+
+    if (!morningContainer || !afternoonContainer) return;
+
+    if (dateDisplay) {
+      dateDisplay.textContent = formatDate(date);
+    }
+
+    const dateStr = formatDateStorage(date);
+
+    // Mostrar loading
+    morningContainer.innerHTML = '<div class="col-span-full text-center text-gray-500">Cargando...</div>';
+    afternoonContainer.innerHTML = '';
+
+    // Obtener todos los turnos de esa fecha de una vez
+    const { data: bookedSlots } = await supabase
+      .from('turnos')
+      .select('hora')
+      .eq('fecha', dateStr);
+
+    const bookedHours = new Set((bookedSlots || []).map(s => s.hora));
+
+    // Render morning slots
+    morningContainer.innerHTML = "";
+    MORNING_SLOTS.forEach((slot) => {
+      const isBooked = bookedHours.has(slot.start);
+      const slotEl = createSlotElement(slot.start, slot.end, isBooked);
+      morningContainer.appendChild(slotEl);
+    });
+
+    // Render afternoon slots
+    afternoonContainer.innerHTML = "";
+    AFTERNOON_SLOTS.forEach((slot) => {
+      const isBooked = bookedHours.has(slot.start);
+      const slotEl = createSlotElement(slot.start, slot.end, isBooked);
+      afternoonContainer.appendChild(slotEl);
+    });
+  }
+
+  // Create slot element
+  function createSlotElement(start: string, end: string, isBooked: boolean): HTMLElement {
+    const slot = document.createElement("button");
+
+    const baseClasses = "flex items-center justify-center py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 ease-out";
+
+    if (isBooked) {
+      slot.className = `${baseClasses} bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed line-through`;
+    } else {
+      slot.className = `${baseClasses} bg-white border-gray-200 text-gray-700 cursor-pointer hover:scale-105 hover:shadow-md hover:border-gray-400`;
+    }
+
+    slot.dataset.time = start;
+    slot.textContent = `${start} - ${end}`;
+
+    if (!isBooked) {
+      slot.addEventListener("click", () => {
+        // Remove previous selection
+        document.querySelectorAll("[data-time]").forEach((s) => {
+          const el = s as HTMLElement;
+          if (!el.classList.contains("line-through")) {
+            el.classList.remove("border-gray-800", "bg-gray-800", "text-white", "shadow-md");
+            el.classList.add("border-gray-200", "bg-white", "text-gray-700");
+          }
+        });
+
+        slot.classList.remove("border-gray-200", "bg-white", "text-gray-700");
+        slot.classList.add("border-gray-800", "bg-gray-800", "text-white", "shadow-md");
+        selectedTime = start;
+        showConfirmationModal();
+      });
+    }
+
+    return slot;
+  }
+
+  // Show confirmation modal
+  function showConfirmationModal() {
+    const modal = document.getElementById("confirmation-modal");
+    const summary = document.getElementById("booking-summary");
+
+    if (!modal || !summary || !selectedService || !selectedDate || !selectedTime) return;
+
+    summary.innerHTML = `
+      <div class="flex justify-between items-center py-2 border-b border-gray-100">
+        <span class="text-gray-600">Servicio</span>
+        <span class="font-medium text-gray-800">${selectedService.name}</span>
+      </div>
+      <div class="flex justify-between items-center py-2 border-b border-gray-100">
+        <span class="text-gray-600">Precio</span>
+        <span class="font-medium text-gray-800">$${selectedService.price.toLocaleString("es-AR")}</span>
+      </div>
+      <div class="flex justify-between items-center py-2 border-b border-gray-100">
+        <span class="text-gray-600">Fecha</span>
+        <span class="font-medium text-gray-800">${formatDate(selectedDate)}</span>
+      </div>
+      <div class="flex justify-between items-center py-2">
+        <span class="text-gray-600">Horario</span>
+        <span class="font-medium text-gray-800">${selectedTime}</span>
+      </div>
+    `;
+
+    modal.classList.remove("hidden");
+  }
+
+  // Hide confirmation modal
+  function hideConfirmationModal() {
+    const modal = document.getElementById("confirmation-modal");
+    modal?.classList.add("hidden");
+  }
+
+  // Confirm booking and open WhatsApp (async)
+  async function confirmBooking() {
+    if (!selectedService || !selectedDate || !selectedTime) return;
+
+    const dateStr = formatDateStorage(selectedDate);
+    const formattedDate = formatDate(selectedDate);
+
+    // Mostrar loading en el botón
+    const confirmBtn = document.getElementById("confirm-booking");
+    const originalContent = confirmBtn?.innerHTML || '';
+    if (confirmBtn) {
+      confirmBtn.textContent = "Guardando...";
+      confirmBtn.setAttribute("disabled", "true");
+    }
+
+    // Guardar en Supabase
+    const success = await saveBooking(dateStr, selectedTime, selectedService.name);
+
+    if (!success) {
+      alert("Error al guardar el turno. Intenta de nuevo.");
+      if (confirmBtn) {
+        confirmBtn.innerHTML = originalContent;
+        confirmBtn.removeAttribute("disabled");
+      }
+      return;
+    }
+
+    // Build WhatsApp message
+    const message = encodeURIComponent(
+      `Hola! Quiero reservar un turno para ${selectedService.name} el día ${formattedDate} a las ${selectedTime}. Mi nombre es:`
+    );
+
+    // Open WhatsApp
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+
+    // Reset state and UI
+    hideConfirmationModal();
+
+    // Restore button
+    if (confirmBtn) {
+      confirmBtn.innerHTML = originalContent;
+      confirmBtn.removeAttribute("disabled");
+    }
+
+    selectedService = null;
+    selectedDate = null;
+    selectedTime = null;
+
+    // Clear selections
+    document.querySelectorAll(".service-card").forEach((card) => {
+      (card as HTMLElement).dataset.selected = "false";
+    });
+
+    showSection("services");
+  }
+
+  // Admin panel functions (async)
+  async function showAdminPanel() {
+    const password = prompt("Ingresa la contraseña de administrador:");
+    if (password !== ADMIN_PASSWORD) {
+      if (password !== null) alert("Contraseña incorrecta");
+      return;
+    }
+
+    const panel = document.getElementById("admin-panel");
+    const bookingsContainer = document.getElementById("admin-bookings");
+    const noBookings = document.getElementById("no-bookings");
+
+    if (!panel || !bookingsContainer || !noBookings) return;
+
+    // Show loading
+    bookingsContainer.innerHTML = '<div class="text-center text-gray-500 py-4">Cargando turnos...</div>';
+    bookingsContainer.classList.remove("hidden");
+    noBookings.classList.add("hidden");
+    panel.classList.remove("hidden");
+
+    const bookings = await getBookings();
+
+    if (bookings.length === 0) {
+      bookingsContainer.classList.add("hidden");
+      noBookings.classList.remove("hidden");
+    } else {
+      bookingsContainer.classList.remove("hidden");
+      noBookings.classList.add("hidden");
+
+      // Sort bookings by date and time
+      bookings.sort((a, b) => {
+        if (a.fecha !== b.fecha) return a.fecha.localeCompare(b.fecha);
+        return a.hora.localeCompare(b.hora);
+      });
+
+      bookingsContainer.innerHTML = bookings
+        .map(
+          (b, index) => `
+          <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg" data-index="${index}">
+            <div>
+              <p class="font-medium text-gray-800">${b.servicio}</p>
+              <p class="text-sm text-gray-600">${b.fecha} a las ${b.hora}</p>
+            </div>
+            <button class="remove-booking text-red-600 hover:text-red-700 p-2" data-fecha="${b.fecha}" data-hora="${b.hora}">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        `
+        )
+        .join("");
+
+      // Add remove listeners
+      bookingsContainer.querySelectorAll(".remove-booking").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+          const target = e.currentTarget as HTMLElement;
+          const fecha = target.dataset.fecha || "";
+          const hora = target.dataset.hora || "";
+          if (confirm("¿Eliminar este turno?")) {
+            const success = await removeBooking(fecha, hora);
+            if (success) {
+              showAdminPanel();
+            } else {
+              alert("Error al eliminar el turno");
+            }
+          }
+        });
+      });
+    }
+  }
+
+  function hideAdminPanel() {
+    const panel = document.getElementById("admin-panel");
+    panel?.classList.add("hidden");
+  }
+
+  async function handleClearAllBookings() {
+    if (confirm("¿Estás seguro de que quieres eliminar TODOS los turnos?")) {
+      const success = await clearAllBookings();
+      if (success) {
+        hideAdminPanel();
+      } else {
+        alert("Error al limpiar los turnos");
+      }
+    }
+  }
+
+  // Event listeners
+  document.addEventListener("DOMContentLoaded", () => {
+    // Service card selection
+    document.querySelectorAll(".service-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const el = card as HTMLElement;
+
+        // Remove previous selection
+        document.querySelectorAll(".service-card").forEach((c) => {
+          (c as HTMLElement).dataset.selected = "false";
+        });
+
+        el.dataset.selected = "true";
+
+        selectedService = {
+          id: el.dataset.serviceId || "",
+          name: el.dataset.serviceName || "",
+          price: parseInt(el.dataset.servicePrice || "0"),
+          duration: el.dataset.serviceDuration || "",
+        };
+
+        showSection("calendar");
+      });
+    });
+
+    // Back buttons
+    document.getElementById("back-to-services")?.addEventListener("click", () => {
+      showSection("services");
+    });
+
+    document.getElementById("back-to-calendar")?.addEventListener("click", () => {
+      showSection("calendar");
+    });
+
+    // Confirmation modal
+    document.getElementById("cancel-booking")?.addEventListener("click", hideConfirmationModal);
+    document.getElementById("confirm-booking")?.addEventListener("click", confirmBooking);
+
+    // Admin panel
+    document.getElementById("open-admin")?.addEventListener("click", showAdminPanel);
+    document.getElementById("close-admin")?.addEventListener("click", hideAdminPanel);
+    document.getElementById("clear-all-bookings")?.addEventListener("click", handleClearAllBookings);
+
+    // Close modals on backdrop click
+    document.getElementById("confirmation-modal")?.addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) hideConfirmationModal();
+    });
+
+    document.getElementById("admin-panel")?.addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) hideAdminPanel();
+    });
+  });
+</script>
