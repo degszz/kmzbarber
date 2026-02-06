@@ -337,32 +337,62 @@ const services = [
 
     container.innerHTML = "";
     const today = new Date();
-    const days = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+    const days = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
     const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
     for (let i = 0; i < 7; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
 
+      const isToday = i === 0;
+
       const dayCard = document.createElement("div");
-      dayCard.className = "flex flex-col items-center justify-center p-3 rounded-xl bg-white border-2 border-gray-200 cursor-pointer transition-all duration-200 ease-out hover:scale-105 hover:shadow-md hover:border-gray-400";
+      dayCard.className = `
+        flex flex-col items-center justify-center
+        min-w-[85px] min-h-[100px] p-4
+        rounded-2xl cursor-pointer
+        transition-all duration-300 ease-out
+        hover:scale-110 hover:shadow-xl
+        ${isToday
+          ? 'bg-gradient-to-br from-gray-700 to-gray-800 text-white shadow-lg border-2 border-gray-600'
+          : 'bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300 hover:border-gray-500 hover:from-gray-200 hover:to-gray-300'
+        }
+      `.replace(/\s+/g, ' ').trim();
       dayCard.dataset.date = formatDateStorage(date);
 
       dayCard.innerHTML = `
-        <span class="text-xs text-gray-500 uppercase tracking-wide">${days[date.getDay()]}</span>
-        <span class="text-xl font-bold text-gray-800">${date.getDate()}</span>
-        <span class="text-xs text-gray-400">${months[date.getMonth()]}</span>
+        <span class="text-xs font-bold uppercase tracking-wider ${isToday ? 'text-gray-300' : 'text-gray-500'}">${days[date.getDay()]}</span>
+        <span class="text-3xl font-black ${isToday ? 'text-white' : 'text-gray-800'}">${date.getDate()}</span>
+        <span class="text-sm font-medium ${isToday ? 'text-gray-300' : 'text-gray-500'}">${months[date.getMonth()]}</span>
+        ${isToday ? '<span class="text-[10px] mt-1 bg-white/20 px-2 py-0.5 rounded-full">HOY</span>' : ''}
       `;
 
       dayCard.addEventListener("click", () => {
         // Remove previous selection
         container.querySelectorAll("[data-date]").forEach((card) => {
-          (card as HTMLElement).classList.remove("border-gray-800", "bg-gray-100", "shadow-md");
-          (card as HTMLElement).classList.add("border-gray-200", "bg-white");
+          const cardEl = card as HTMLElement;
+          const cardDate = cardEl.dataset.date;
+          const cardIsToday = cardDate === formatDateStorage(today);
+
+          if (cardIsToday) {
+            cardEl.className = 'flex flex-col items-center justify-center min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl bg-gradient-to-br from-gray-700 to-gray-800 text-white shadow-lg border-2 border-gray-600';
+          } else {
+            cardEl.className = 'flex flex-col items-center justify-center min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300 hover:border-gray-500 hover:from-gray-200 hover:to-gray-300';
+          }
         });
 
-        dayCard.classList.remove("border-gray-200", "bg-white");
-        dayCard.classList.add("border-gray-800", "bg-gray-100", "shadow-md");
+        // Apply selected state
+        dayCard.className = 'flex flex-col items-center justify-center min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-2xl border-2 border-gray-700 scale-105';
+
+        // Update text colors for selected
+        const spans = dayCard.querySelectorAll('span');
+        spans[0]?.classList.remove('text-gray-500', 'text-gray-300');
+        spans[0]?.classList.add('text-gray-300');
+        spans[1]?.classList.remove('text-gray-800');
+        spans[1]?.classList.add('text-white');
+        spans[2]?.classList.remove('text-gray-500', 'text-gray-300');
+        spans[2]?.classList.add('text-gray-300');
+
         selectedDate = date;
         showSection("timeslots");
       });
