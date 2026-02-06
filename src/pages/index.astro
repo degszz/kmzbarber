@@ -113,8 +113,66 @@ import "../styles/global.css";
 		<!-- Sistema de Reservas -->
 		<BookingSystem />
 
+		<!-- Ubicación con Street View -->
+		<section id="ubicacion" class="w-full max-w-4xl mx-auto px-4 py-10 animate-fade-in">
+			<div class="text-center mb-8">
+				<h2 class="text-3xl font-bold text-gray-800 mb-3 flex items-center justify-center gap-3">
+					<span class="text-4xl">📍</span> Encontranos Acá
+				</h2>
+				<p class="text-gray-700 font-medium text-lg">Esquina Lopez y Av. los Pescadores (Costanera)</p>
+				<p class="text-gray-500">San Miguel del Monte, Buenos Aires</p>
+			</div>
+
+			<!-- Street View Embed -->
+			<div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-300 hover:border-gray-400 hover:shadow-3xl transition-all duration-500 group">
+				<iframe
+					src="https://www.google.com/maps/embed?pb=!4v1770360741671!6m8!1m7!1s95P57OpLsRO7oF5w8hkA5w!2m2!1d-35.44233008116939!2d-58.79798163849391!3f284.984845258322!4f-5.734310394098628!5f2.553612667928414"
+					width="100%"
+					height="400"
+					style="border:0;"
+					allowfullscreen=""
+					loading="lazy"
+					referrerpolicy="no-referrer-when-downgrade"
+					class="w-full group-hover:scale-[1.01] transition-transform duration-500">
+				</iframe>
+			</div>
+
+			<!-- Botones de acción -->
+			<div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+				<a
+					href="https://www.google.com/maps/place/35%C2%B026'32.4%22S+58%C2%B047'53.3%22W/@-35.4423256,-58.7981339,17z"
+					target="_blank"
+					class="inline-flex items-center gap-2 px-6 py-3
+						bg-gray-800 hover:bg-gray-700
+						text-white font-medium rounded-xl
+						transition-all duration-300
+						hover:scale-105 hover:shadow-xl
+						shadow-lg">
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+						<path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+					</svg>
+					Abrir en Google Maps
+				</a>
+				<a
+					href="https://wa.me/5492226532910?text=Hola!%20Quiero%20saber%20cómo%20llegar%20a%20KMZ%20Studio"
+					target="_blank"
+					class="inline-flex items-center gap-2 px-6 py-3
+						bg-green-600 hover:bg-green-500
+						text-white font-medium rounded-xl
+						transition-all duration-300
+						hover:scale-105 hover:shadow-xl
+						shadow-lg">
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M3 21l1.65-3.8a9 9 0 113.4 2.9l-5.05.9" />
+					</svg>
+					¿Cómo llego?
+				</a>
+			</div>
+		</section>
+
 		<!-- Bento Grid Info Section -->
-		<div id="informacion" class="mb-[100px]"></div>
+		<div id="informacion" class="mb-[60px]"></div>
 		<section  class="w-full max-w-6xl mx-auto px-4 py-8">
 
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4
@@ -145,7 +203,8 @@ import "../styles/global.css";
 							<path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
 						</svg>
 						San Miguel del Monte, BA
-						
+						<br>
+						Esquina Lopez y Avenida los Pescadores (Costanera)
 					</div>
 				</div>
 
@@ -161,6 +220,8 @@ import "../styles/global.css";
 					</h3>
 					<p class="text-gray-300 text-sm mb-2">
 						San Miguel del Monte, Buenos Aires
+						<br>
+						Esquina Lopez y Avenida los Pescadores (Costanera)
 					</p>
 					<div class="mt-auto flex items-center gap-2 text-gray-400 text-xs">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -209,15 +270,15 @@ import "../styles/global.css";
 					<ul class="text-gray-100 text-sm space-y-1.5">
 						<li class="flex items-center gap-2">
 							<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
-							Cortes de cabello
+							Cortes de Pelo
 						</li>
 						<li class="flex items-center gap-2">
 							<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
-							Perfilado de barba y cejas
+							Perfilado de Barba y Cejas
 						</li>
 						<li class="flex items-center gap-2">
 							<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
-							Mechas y coloración
+							Mechas y Coloración Global
 						</li>
 					</ul>
 				</div>
