@@ -23,7 +23,7 @@ import "../styles/global.css";
 						mr-2 mb-2 px-2.5 py-1.5
 						 font-medium text-center
 						justify-center inline-flex items-center flex-row
-						rounded-lg border gap-x-2 opacity-90
+						rounded-lg gap-x-2 opacity-90
 						cursor-pointer hover:bg-kai-hover dark:bg-kai-hover dark:hover:bg-kai-bg hover:text-white
 						hover:opacity-100 hover:bg-black-600
 						hover:scale-110 hover:shadow-lg
@@ -39,7 +39,7 @@ import "../styles/global.css";
 						mr-2 mb-2 px-2.5 py-1.5
 						 font-medium text-center
 						justify-center inline-flex items-center flex-row
-						rounded-lg border gap-x-2 opacity-90
+						rounded-lg gap-x-2 opacity-90
 						cursor-pointer dark:bg-kai-hover dark:hover:bg-kai-bg hover:bg-kai-hover hover:text-white
 						hover:opacity-100 hover:bg-black-600
 						hover:scale-110 hover:shadow-lg
@@ -71,7 +71,7 @@ import "../styles/global.css";
 						mr-2 mb-2 px-2.5 py-1.5
 						 font-medium text-center
 						justify-center inline-flex items-center flex-row
-						rounded-lg border gap-x-2 opacity-90
+						rounded-lg gap-x-2 opacity-90
 						cursor-pointer dark:bg-kai-hover dark:hover:bg-kai-bg hover:bg-kai-hover hover:text-white
 						hover:opacity-100 hover:bg-black-600
 						hover:scale-110 hover:shadow-lg
@@ -103,7 +103,7 @@ import "../styles/global.css";
 			<div class="w-fit md:w-fit flex justify-center mt-8">
 				<img
 					src="/tijera.gif"
-					class="w-[150px] md:w-[250px] md:h-[250px] absolute top-15 right-10 lg:top-5 lg:right-50
+					class="w-[150px] md:w-[250px] md:h-[250px] 
 							animate-shake animate-infinite animate-duration-[1500ms] animate-delay-0"
 					alt="Tijeras"
 				/>
@@ -114,10 +114,8 @@ import "../styles/global.css";
 		<BookingSystem />
 
 		<!-- Bento Grid Info Section -->
-		<section id="informacion" class="w-full max-w-6xl mx-auto px-4 py-8">
-			<h2 class="text-3xl font-bold text-center mb-8 text-black animate-fade-in">
-				✂️ Información
-			</h2>
+		<div id="informacion" class="mb-[100px]"></div>
+		<section  class="w-full max-w-6xl mx-auto px-4 py-8">
 
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4
 				auto-rows-[minmax(160px,auto)]
