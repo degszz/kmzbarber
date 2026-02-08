@@ -6,139 +6,234 @@ import "../styles/global.css";
 
 <Layout>
 	<body class="h-full w-full flex flex-col justify-center items-center">
-		<div
-			class="w-full lg:min-w-[800px] mt-8 py-9 flex flex-col md:flex-row justify-center items-center md:items-center animate-fade-in animate-delay-200 animate-duration-slow"
-		>
-			<div class="text-start max-w-[280px] md:max-w-[400px]">
-				<div class="">
-					<h1 class="text-3xl text-dark font-sans">
-						<b>Barberia: KMZ Studio</b>
-					</h1>
 
+		<!-- Hero Section con Carousel de fondo -->
+		<section class="relative w-full h-[85vh] md:h-[85vh] overflow-hidden">
+
+			<!-- Carousel de imágenes de fondo -->
+			<div id="hero-carousel" class="absolute inset-0 w-full h-full block md:hidden">
+				<div class="carousel-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-1000">
+					<img src="/1.avif" alt="KMZ Studio 1" class="w-full h-full object-cover object-center" />
 				</div>
-				<div class="w-full flex items-center justify-start my-2">
+				<div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000">
+					<img src="/2.avif" alt="KMZ Studio 2" class="w-full h-full object-cover object-center" />
+				</div>
+				<div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000">
+					<img src="/3.avif" alt="KMZ Studio 3" class="w-full h-full object-cover object-center" />
+				</div>
+			</div>
+
+			<!-- Overlay oscuro con blur -->
+			<div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+
+			<!-- Contenido sobre el carousel -->
+			<div class="absolute inset-0 flex flex-col md:flex-row items-center justify-center px-6 pt-[100px] md:pt-[90px]">
+
+				<!-- Texto y botones -->
+				<div class="text-center md:text-left max-w-[320px] md:max-w-[450px] z-10">
+					<h1 class="text-4xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">
+						KMZ Studio
+					</h1>
+					<p class="text-lg md:text-xl text-gray-200 mb-2 font-medium">
+						Barbería
+					</p>
 					<a
-						href="#servicios"
-						class="bg-[#959595] hover:bg-[#767676] text-white
-						mr-2 mb-2 px-2.5 py-1.5
-						 font-medium text-center
-						justify-center inline-flex items-center flex-row
-						rounded-lg gap-x-2 opacity-90
-						cursor-pointer hover:bg-kai-hover dark:bg-kai-hover dark:hover:bg-kai-bg hover:text-white
-						hover:opacity-100 hover:bg-black-600
-						hover:scale-110 hover:shadow-lg
-						dark:focus:ring-black-300
-						focus:ring-2 focus:outline-none focus:ring-black-30
-						transition-all duration-200 ease-in-out scale-90"
+						target="_blank"
+						href="https://www.google.com/maps/place/35%C2%B026'32.4%22S+58%C2%B047'53.3%22W/@-35.4423256,-58.7981339,17z"
+						class="inline-flex items-center gap-2 text-gray-300 hover:text-white text-sm mb-6 transition-colors"
 					>
-						Turnos
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-4 h-4"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+							></path>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+						</svg>
+						Esquina Lopez y Costanera
 					</a>
-					<a
-						href="https://www.instagram.com/kmz.barberia"
-						class="bg-[#959595] hover:bg-[#767676]
-						mr-2 mb-2 px-2.5 py-1.5
-						 font-medium text-center
-						justify-center inline-flex items-center flex-row
-						rounded-lg gap-x-2 opacity-90
-						cursor-pointer dark:bg-kai-hover dark:hover:bg-kai-bg hover:bg-kai-hover hover:text-white
-						hover:opacity-100 hover:bg-black-600
-						hover:scale-110 hover:shadow-lg
-						dark:focus:ring-black-300
-						focus:ring-2 focus:outline-none focus:ring-black-30
-						transition-all duration-200 ease-in-out scale-90"
-						target="_blank"
-						><svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="#fff"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="icon icon-tabler icons-tabler-outline icon-tabler-brand-instagram"
-							><path stroke="none" d="M0 0h24v24H0z" fill="none"
-							></path><path
-								d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"
-							></path><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
-							></path><path d="M16.5 7.5v.01"></path></svg
-						></a
-					>
-					<a
-						href="https://wa.me/5492226532910"
-						class="bg-[#959595] hover:bg-[#767676]
-						mr-2 mb-2 px-2.5 py-1.5
-						 font-medium text-center
-						justify-center inline-flex items-center flex-row
-						rounded-lg gap-x-2 opacity-90
-						cursor-pointer dark:bg-kai-hover dark:hover:bg-kai-bg hover:bg-kai-hover hover:text-white
-						hover:opacity-100 hover:bg-black-600
-						hover:scale-110 hover:shadow-lg
-						dark:focus:ring-black-300
-						focus:ring-2 focus:outline-none focus:ring-black-30
-						transition-all duration-200 ease-in-out scale-90"
-						target="_blank"
-						><svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="#fff"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="icon icon-tabler icons-tabler-outline icon-tabler-brand-whatsapp"
-							><path stroke="none" d="M0 0h24v24H0z" fill="none"
-							></path><path
-								d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"
-							></path><path
-								d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"
-							></path></svg
-						></a
-					>
+
+					<!-- Botones de acción -->
+					<div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+						<a
+							href="#servicios"
+							class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white
+							px-5 py-2.5 font-semibold text-center
+							inline-flex items-center
+							rounded-full gap-x-2
+							hover:scale-105 shadow-lg
+							transition-all duration-300"
+						>
+							Turnos
+						</a>
+						<a
+							href="https://www.instagram.com/kmz.barberia"
+							class="bg-[#C72785]/60 hover:bg-[#C72785] backdrop-blur-sm
+							p-3 rounded-full
+							hover:scale-110 shadow-lg
+							transition-all duration-300"
+							target="_blank"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#fff"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<path d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path>
+								<path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+								<path d="M16.5 7.5v.01"></path>
+							</svg>
+						</a>
+						<a
+							href="https://wa.me/5492226532910"
+							class="bg-green-600/80 hover:bg-green-500 backdrop-blur-sm
+							p-3 rounded-full
+							hover:scale-110 shadow-lg
+							transition-all duration-300"
+							target="_blank"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#fff"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"></path>
+								<path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+
+				<!-- GIF de tijeras -->
+				<div class="mt-8 md:mt-0 md:ml-12 z-10">
+					<img
+						src="/tijera.gif"
+						class="w-[120px] h-[120px] md:w-[200px] md:h-[200px]
+							animate-shake animate-infinite animate-duration-[1500ms] animate-delay-0
+							drop-shadow-2xl"
+						alt="Tijeras"
+					/>
 				</div>
 			</div>
-			<div class="w-fit md:w-fit flex justify-center mt-8">
-				<img
-					src="/tijera.gif"
-					class="w-[150px] md:w-[250px] md:h-[250px] 
-							animate-shake animate-infinite animate-duration-[1500ms] animate-delay-0"
-					alt="Tijeras"
-				/>
+
+			<!-- Indicadores del carousel -->
+			<div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+				<button class="carousel-dot w-3 h-3 rounded-full bg-white/80 transition-all duration-300" data-index="0"></button>
+				<button class="carousel-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300" data-index="1"></button>
+				<button class="carousel-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300" data-index="2"></button>
 			</div>
-		</div>
+
+			<!-- Flecha para bajar -->
+			<a href="#servicios" class="absolute bottom-6 right-6 z-10 animate-bounce">
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white/70 hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+				</svg>
+			</a>
+		</section>
+
+		<!-- Script del carousel -->
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				const slides = document.querySelectorAll('.carousel-slide');
+				const dots = document.querySelectorAll('.carousel-dot');
+				let currentIndex = 0;
+				const intervalTime = 5000; // 5 segundos
+
+				function showSlide(index: number) {
+					slides.forEach((slide, i) => {
+						(slide as HTMLElement).style.opacity = i === index ? '1' : '0';
+					});
+					dots.forEach((dot, i) => {
+						dot.classList.toggle('bg-white/80', i === index);
+						dot.classList.toggle('bg-white/40', i !== index);
+					});
+					currentIndex = index;
+				}
+
+				// Auto-play
+				setInterval(() => {
+					const nextIndex = (currentIndex + 1) % slides.length;
+					showSlide(nextIndex);
+				}, intervalTime);
+
+				// Click en dots
+				dots.forEach((dot) => {
+					dot.addEventListener('click', () => {
+						const index = parseInt((dot as HTMLElement).dataset.index || '0');
+						showSlide(index);
+					});
+				});
+			});
+		</script>
 
 		<!-- Sistema de Reservas -->
 		<BookingSystem />
 
 		<!-- Ubicación con Street View -->
-		<section id="ubicacion" class="w-full max-w-4xl mx-auto px-4 py-10 animate-fade-in">
+		 <div 
+			id="ubicacion"
+			class="mb-4"
+		 ></div>
+		<section
+			class="w-full max-w-4xl mx-auto px-4 py-10 animate-fade-in"
+		>
 			<div class="text-center mb-8">
-				<h2 class="text-3xl font-bold text-gray-800 mb-3 flex items-center justify-center gap-3">
+				<h2
+					class="text-3xl font-bold text-gray-800 mb-3 flex items-center justify-center gap-3"
+				>
 					<span class="text-4xl">📍</span> Encontranos Acá
 				</h2>
-				<p class="text-gray-700 font-medium text-lg">Esquina Lopez y Av. los Pescadores (Costanera)</p>
+				<p class="text-gray-700 font-medium text-lg">
+					Esquina Lopez y Av. los Pescadores (Costanera)
+				</p>
 				<p class="text-gray-500">San Miguel del Monte, Buenos Aires</p>
 			</div>
 
 			<!-- Street View Embed -->
-			<div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-300 hover:border-gray-400 hover:shadow-3xl transition-all duration-500 group">
+			<div
+				class="rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-300 hover:border-gray-400 hover:shadow-3xl transition-all duration-500 group"
+			>
 				<iframe
-					src="https://www.google.com/maps/embed?pb=!4v1770360741671!6m8!1m7!1s95P57OpLsRO7oF5w8hkA5w!2m2!1d-35.44233008116939!2d-58.79798163849391!3f284.984845258322!4f-5.734310394098628!5f2.553612667928414"
+					src="https://www.google.com/maps/embed?pb=!4v1770397106337!6m8!1m7!1s95P57OpLsRO7oF5w8hkA5w!2m2!1d-35.44233008116939!2d-58.79798163849391!3f293.28778337427195!4f-3.598218281064206!5f0.7820865974627469"
 					width="100%"
 					height="400"
 					style="border:0;"
 					allowfullscreen=""
 					loading="lazy"
 					referrerpolicy="no-referrer-when-downgrade"
-					class="w-full group-hover:scale-[1.01] transition-transform duration-500">
+					class="w-full group-hover:scale-[1.01] transition-transform duration-500"
+				>
 				</iframe>
 			</div>
 
 			<!-- Botones de acción -->
-			<div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+			<div
+				class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4"
+			>
 				<a
 					href="https://www.google.com/maps/place/35%C2%B026'32.4%22S+58%C2%B047'53.3%22W/@-35.4423256,-58.7981339,17z"
 					target="_blank"
@@ -147,10 +242,25 @@ import "../styles/global.css";
 						text-white font-medium rounded-xl
 						transition-all duration-300
 						hover:scale-105 hover:shadow-xl
-						shadow-lg">
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-						<path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+						shadow-lg"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="w-5 h-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+						></path>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 					Abrir en Google Maps
 				</a>
@@ -162,9 +272,20 @@ import "../styles/global.css";
 						text-white font-medium rounded-xl
 						transition-all duration-300
 						hover:scale-105 hover:shadow-xl
-						shadow-lg">
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M3 21l1.65-3.8a9 9 0 113.4 2.9l-5.05.9" />
+						shadow-lg"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="w-5 h-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M3 21l1.65-3.8a9 9 0 113.4 2.9l-5.05.9"></path>
 					</svg>
 					¿Cómo llego?
 				</a>
@@ -173,125 +294,140 @@ import "../styles/global.css";
 
 		<!-- Bento Grid Info Section -->
 		<div id="informacion" class="mb-[60px]"></div>
-		<section  class="w-full max-w-6xl mx-auto px-4 py-8">
-
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4
+		<section class="w-full max-w-6xl mx-auto px-4 py-8">
+			<div
+				class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4
 				auto-rows-[minmax(160px,auto)]
 				lg:grid-rows-[180px_180px_auto_auto]
-				lg:[grid-auto-flow:row_dense]">
-
+				lg:[grid-auto-flow:row_dense]"
+			>
 				<!-- Card Grande (2x2) - Sobre KMZ Studio -->
-				<div class="rounded-xl shadow-md p-6 bg-gradient-to-br from-gray-700 to-gray-800
+				<div
+					class="rounded-xl shadow-md p-6 bg-gradient-to-br from-gray-700 to-gray-800
 					col-span-1 sm:col-span-2 lg:col-span-2 lg:row-span-2
 					flex flex-col justify-between min-h-[200px]
 					transition-all duration-300 ease-out
 					hover:scale-[1.02] hover:shadow-xl hover:saturate-150
-					animate-fade-in animate-delay-100">
+					animate-fade-in animate-delay-100"
+				>
 					<div>
-						<h3 class="text-2xl font-bold mb-4 text-white flex items-center gap-2">
+						<h3
+							class="text-2xl font-bold mb-4 text-white flex items-center gap-2"
+						>
 							<span class="text-3xl">✂️</span> KMZ Studio
 						</h3>
 						<p class="text-gray-200 text-base leading-relaxed">
-							Barbería ubicada en <strong>San Miguel del Monte</strong>, Buenos Aires.
-							Especialistas en cortes modernos, perfilado de barba y tratamientos capilares.
-							Atención personalizada en un ambiente relajado y profesional.
+							Barbería ubicada en <strong
+								>San Miguel del Monte</strong
+							>, Buenos Aires. Especialista en cortes modernos,
+							perfilado de barba y Asesoramiento Personal.
+							Atención personalizada en un ambiente relajado y
+							profesional.
 						</p>
 					</div>
-					<div class="mt-4 flex items-center gap-2 text-gray-400 text-sm">
-						<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-							<path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+					<div
+						class="mt-4 flex items-center gap-2 text-gray-400 text-sm"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-5 h-5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+							></path>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
 						</svg>
 						San Miguel del Monte, BA
-						<br>
+						<br />
 						Esquina Lopez y Avenida los Pescadores (Costanera)
-					</div>
-				</div>
-
-				<!-- Card Mediana - Ubicación -->
-				<div class="rounded-xl shadow-md p-5 bg-gradient-to-br from-zinc-700 to-zinc-800
-					col-span-1 min-h-[160px]
-					flex flex-col
-					transition-all duration-300 ease-out
-					hover:scale-[1.03] hover:shadow-xl hover:saturate-150
-					animate-fade-in animate-delay-200">
-					<h3 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
-						<span>📍</span> Ubicación
-					</h3>
-					<p class="text-gray-300 text-sm mb-2">
-						San Miguel del Monte, Buenos Aires
-						<br>
-						Esquina Lopez y Avenida los Pescadores (Costanera)
-					</p>
-					<div class="mt-auto flex items-center gap-2 text-gray-400 text-xs">
-						<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-						</svg>
-						Lun - Sáb: 10:00 - 20:00
 					</div>
 				</div>
 
 				<!-- Card Mediana - Horarios -->
-				<div class="rounded-xl shadow-md p-5 bg-gradient-to-br from-gray-600 to-gray-700
-					col-span-1 min-h-[160px]
+				<div
+					class="rounded-xl shadow-md p-5 bg-gradient-to-br from-gray-600 to-gray-700
+					col-span-1 sm:col-span-2 min-h-[160px]
 					flex flex-col
 					transition-all duration-300 ease-out
 					hover:scale-[1.03] hover:shadow-xl hover:saturate-150
-					animate-fade-in animate-delay-300">
-					<h3 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+					animate-fade-in animate-delay-300"
+				>
+					<h3
+						class="text-lg font-semibold mb-3 text-white flex items-center gap-2"
+					>
 						<span>🕐</span> Horarios
 					</h3>
 					<ul class="text-gray-300 text-sm space-y-1">
-						<li class="flex justify-between">
+						<li class="flex justify-around">
 							<span>Lun - Vie:</span>
 							<span>10:00 - 20:00</span>
 						</li>
-						<li class="flex justify-between">
+						<li class="flex justify-around">
 							<span>Sábados:</span>
 							<span>10:00 - 20:00</span>
 						</li>
-						<li class="flex justify-between text-gray-500">
+						<li class="flex justify-center text-gray-500">
 							<span>Domingos:</span>
-							<span>Cerrado</span>
+							<span>ㅤCerrado</span>
 						</li>
 					</ul>
 				</div>
 
 				<!-- Card Pequeña - Servicios -->
-				<div class="rounded-xl shadow-md p-5 bg-[#959595]
+				<div
+					class="rounded-xl shadow-md p-5 bg-[#959595]
 					col-span-1 min-h-[160px]
 					flex flex-col
 					transition-all duration-300 ease-out
 					hover:scale-[1.03] hover:shadow-xl hover:saturate-150
-					animate-fade-in animate-delay-400">
-					<h3 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+					animate-fade-in animate-delay-400"
+				>
+					<h3
+						class="text-lg font-semibold mb-3 text-white flex items-center gap-2"
+					>
 						<span>💈</span> Servicios
 					</h3>
 					<ul class="text-gray-100 text-sm space-y-1.5">
 						<li class="flex items-center gap-2">
-							<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+							<span class="w-1.5 h-1.5 bg-white rounded-full"
+							></span>
 							Cortes de Pelo
 						</li>
 						<li class="flex items-center gap-2">
-							<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+							<span class="w-1.5 h-1.5 bg-white rounded-full"
+							></span>
 							Perfilado de Barba y Cejas
 						</li>
 						<li class="flex items-center gap-2">
-							<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+							<span class="w-1.5 h-1.5 bg-white rounded-full"
+							></span>
 							Mechas y Coloración Global
 						</li>
 					</ul>
 				</div>
 
 				<!-- Card Pequeña - Por qué elegirnos -->
-				<div class="rounded-xl shadow-md p-5 bg-[#767676]
+				<div
+					class="rounded-xl shadow-md p-5 bg-[#767676]
 					col-span-1 min-h-[160px]
 					flex flex-col
 					transition-all duration-300 ease-out
 					hover:scale-[1.03] hover:shadow-xl hover:saturate-150
-					animate-fade-in animate-delay-500">
-					<h3 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
-						<span>⭐</span> Por qué elegirnos
+					animate-fade-in animate-delay-500"
+				>
+					<h3
+						class="text-lg font-semibold mb-3 text-white flex items-center gap-2"
+					>
+						<span>⭐</span> Por qué elegirme
 					</h3>
 					<ul class="text-gray-100 text-sm space-y-1.5">
 						<li class="flex items-center gap-2">
@@ -314,79 +450,153 @@ import "../styles/global.css";
 				</div>
 
 				<!-- Card Mediana - Cómo Reservar -->
-				<div class="rounded-xl shadow-md p-5 bg-gradient-to-br from-gray-700 to-zinc-800
+				<div
+					class="rounded-xl shadow-md p-5 bg-gradient-to-br from-gray-700 to-zinc-800
 					col-span-1 sm:col-span-2 lg:col-span-4 min-h-[120px]
 					flex flex-col justify-center
 					transition-all duration-300 ease-out
 					hover:scale-[1.03] hover:shadow-xl hover:saturate-150
-					animate-fade-in animate-delay-600">
-					<h3 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+					animate-fade-in animate-delay-600"
+				>
+					<h3
+						class="text-lg font-semibold mb-3 text-white flex items-center gap-2"
+					>
 						<span>📱</span> Cómo Reservar
 					</h3>
-					<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+					<div
+						class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center"
+					>
 						<div class="flex flex-col items-center">
-							<span class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold text-sm mb-1">1</span>
-							<span class="text-gray-300 text-xs">Elegí tu servicio</span>
+							<span
+								class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold text-sm mb-1"
+								>1</span
+							>
+							<span class="text-gray-300 text-xs"
+								>Elegí tu servicio</span
+							>
 						</div>
 						<div class="flex flex-col items-center">
-							<span class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold text-sm mb-1">2</span>
-							<span class="text-gray-300 text-xs">Seleccioná fecha</span>
+							<span
+								class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold text-sm mb-1"
+								>2</span
+							>
+							<span class="text-gray-300 text-xs"
+								>Seleccioná fecha</span
+							>
 						</div>
 						<div class="flex flex-col items-center">
-							<span class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold text-sm mb-1">3</span>
-							<span class="text-gray-300 text-xs">Confirmá por WhatsApp</span>
+							<span
+								class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold text-sm mb-1"
+								>3</span
+							>
+							<span class="text-gray-300 text-xs"
+								>Confirmá por WhatsApp</span
+							>
 						</div>
 						<div class="flex flex-col items-center">
-							<span class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-bold text-sm mb-1">✓</span>
-							<span class="text-gray-300 text-xs">¡Te esperamos!</span>
+							<span
+								class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-bold text-sm mb-1"
+								>✓</span
+							>
+							<span class="text-gray-300 text-xs"
+								>¡Te esperamos!</span
+							>
 						</div>
 					</div>
 				</div>
 
 				<!-- Card CTA - Contacto -->
-				<div class="rounded-xl shadow-md p-5 bg-gradient-to-br from-zinc-700 to-gray-800
+				<div
+					class="rounded-xl shadow-md p-5 bg-gradient-to-br from-zinc-700 to-gray-800
 					col-span-1 sm:col-span-2 lg:col-span-4 min-h-[100px]
 					flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4
 					transition-all duration-300 ease-out
 					hover:scale-[1.01] hover:shadow-xl hover:saturate-150
-					animate-fade-in animate-delay-700">
+					animate-fade-in animate-delay-700"
+				>
 					<div>
-						<h3 class="text-lg font-semibold mb-2 text-white flex items-center gap-2">
+						<h3
+							class="text-lg font-semibold mb-2 text-white flex items-center gap-2"
+						>
 							<span>📞</span> Contacto
 						</h3>
-						<div class="text-gray-300 text-sm flex flex-col sm:flex-row sm:gap-6 gap-1">
+						<div
+							class="text-gray-300 text-sm flex flex-col sm:flex-row sm:gap-6 gap-1"
+						>
 							<p class="flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="w-4 h-4 text-green-400"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+									></path>
 								</svg>
 								+54 9 2226 53-2910
 							</p>
 							<p class="flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M4 8a4 4 0 014-4h8a4 4 0 014 4v8a4 4 0 01-4 4H8a4 4 0 01-4-4V8z" />
-									<circle cx="12" cy="12" r="3" />
-									<circle cx="16.5" cy="7.5" r="0.5" fill="currentColor" />
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="w-4 h-4 text-pink-400"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M4 8a4 4 0 014-4h8a4 4 0 014 4v8a4 4 0 01-4 4H8a4 4 0 01-4-4V8z"
+									></path>
+									<circle cx="12" cy="12" r="3"></circle>
+									<circle
+										cx="16.5"
+										cy="7.5"
+										r="0.5"
+										fill="currentColor"></circle>
 								</svg>
 								@kmz.barberia
 							</p>
 						</div>
 					</div>
-					<a href="https://wa.me/5492226532910"
+					<a
+						href="https://wa.me/5492226532910"
 						target="_blank"
 						class="inline-flex items-center justify-center gap-2 px-6 py-3
 							bg-green-600 hover:bg-green-500
 							text-white font-medium rounded-lg
 							transition-all duration-300
 							hover:scale-105 hover:shadow-lg
-							whitespace-nowrap">
-						<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M3 21l1.65-3.8a9 9 0 113.4 2.9l-5.05.9" />
-							<path stroke-linecap="round" stroke-linejoin="round" d="M9 10a.5.5 0 001 0V9a.5.5 0 00-1 0v1a5 5 0 005 5h1a.5.5 0 000-1h-1a.5.5 0 000 1" />
+							whitespace-nowrap"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-5 h-5"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M3 21l1.65-3.8a9 9 0 113.4 2.9l-5.05.9"
+							></path>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M9 10a.5.5 0 001 0V9a.5.5 0 00-1 0v1a5 5 0 005 5h1a.5.5 0 000-1h-1a.5.5 0 000 1"
+							></path>
 						</svg>
 						Contactar por WhatsApp
 					</a>
 				</div>
-
 			</div>
 		</section>
 	</body>

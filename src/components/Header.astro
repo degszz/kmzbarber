@@ -1,94 +1,231 @@
 ---
-import Menu from "../components/Menu.astro";
-
+// Header con animación al scroll
 ---
 
 <header
-    class="z-[1000] bg-[#F3F5F6]/50 fixed top-0 text-white-950 h-[90px] md:h-[90px] w-full flex items-center justify-between"
+    id="main-header"
+    class="fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ease-out"
 >
-    <div
-        class="flex pl-5 lg:min-w-[190px] items-center justify-center w-fit text-center h-full lg:w-[200px]"
-    >
-        <Menu />
-        <div
-            class="hidden hover:decoration-[#377DEC] lg:block text-xl text-start w-full font-sans"
-        >
-            <a
-                href="/"
-                class="scale-90 duration-200 hover:scale-110 hover:cursor-pointer flex w-full"
-            >
-                <img src="/logo.avif" class="w-[70px]" alt="" />
-               
+    <div id="header-inner" class="flex items-center justify-between px-4 md:px-6 transition-all duration-500 h-[80px]">
+
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2 group">
+            <img
+                id="header-logo"
+                src="/logo.avif"
+                alt="KMZ Studio"
+                class="w-[60px] md:w-[70px] transition-all duration-500 group-hover:scale-110"
+            />
+
+        </a>
+
+        <!-- Navegación Desktop -->
+        <nav class="hidden lg:flex items-center gap-1">
+            <a href="#servicios" class="nav-link px-4 py-2 text-white/90 hover:text-white font-medium rounded-full hover:bg-white/10 transition-all duration-300">
+                Turnos
             </a>
+            <a href="#ubicacion" class="nav-link px-4 py-2 text-white/90 hover:text-white font-medium rounded-full hover:bg-white/10 transition-all duration-300">
+                Ubicación
+            </a>
+            <a href="#informacion" class="nav-link px-4 py-2 text-white/90 hover:text-white font-medium rounded-full hover:bg-white/10 transition-all duration-300">
+                Info
+            </a>
+        </nav>
+
+        <!-- Botones de redes + Menú móvil -->
+        <div class="flex items-center gap-2">
+            <!-- WhatsApp -->
+            <a
+                href="https://wa.me/5492226532910"
+                target="_blank"
+                class="social-btn flex items-center justify-center w-10 h-10 rounded-full bg-black/20 hover:bg-green-500 backdrop-blur-sm transition-all duration-300 hover:scale-110"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"></path>
+                    <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"></path>
+                </svg>
+            </a>
+
+            <!-- Instagram -->
+            <a
+                href="https://www.instagram.com/kmz.barberia"
+                target="_blank"
+                class="social-btn flex items-center justify-center w-10 h-10 rounded-full bg-black/20 hover:bg-[#C72785] backdrop-blur-sm transition-all duration-300 hover:scale-110"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path>
+                    <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                    <path d="M16.5 7.5v.01"></path>
+                </svg>
+            </a>
+
+            <!-- Botón menú móvil -->
+            <button
+                id="menu-toggle"
+                class="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-black/20 hover:bg-black/60 backdrop-blur-sm transition-all duration-300"
+                aria-label="Menú"
+            >
+                <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-all duration-300">
+                    <path d="M4 6h16"></path>
+                    <path d="M4 12h16"></path>
+                    <path d="M4 18h16"></path>
+                </svg>
+                <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden transition-all duration-300">
+                    <path d="M18 6L6 18"></path>
+                    <path d="M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
     </div>
-    <div class="flex w-full h-full justify-center items-center">
-        
-        <div class="flex md:hidden">
-            <div
-                class="hover:decoration-[#377DEC] text-xl text-start w-full font-sans"
-            >
-                <a
-                    href="/"
-                    class="scale-90 duration-200 hover:scale-110 hover:cursor-pointer flex w-full"
-                >
-                    <img src="/logo.avif" class="w-[90px]" alt="" />
+
+    <!-- Menú móvil desplegable -->
+    <div id="mobile-menu" class="lg:hidden hidden absolute top-full left-0 right-0 bg-[#767676] backdrop-blur-lg border-t border-white/10 shadow-2xl">
+        <nav class="flex flex-col p-4 gap-1">
+            <a href="#servicios" class="mobile-nav-link flex items-center gap-3 px-4 py-3 text-white font-medium rounded-xl hover:bg-white/10 transition-all duration-300">
+                Reservar Turno
+            </a>
+            <a href="#ubicacion" class="mobile-nav-link flex items-center gap-3 px-4 py-3 text-white font-medium rounded-xl hover:bg-white/10 transition-all duration-300">
+                Ubicación
+            </a>
+            <a href="#informacion" class="mobile-nav-link flex items-center gap-3 px-4 py-3 text-white font-medium rounded-xl hover:bg-white/10 transition-all duration-300">
+                Información
+            </a>
+            <div class="border-t border-white/10 my-2"></div>
+            <div class="flex items-center justify-center gap-4 py-2">
+                <a href="https://wa.me/5492226532910" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-full transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"></path>
+                    </svg>
+                    WhatsApp
+                </a>
+                <a href="https://www.instagram.com/kmz.barberia" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-[#C72785] hover:bg-[#a01f6b] text-white rounded-full transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path>
+                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                    </svg>
+                    Instagram
                 </a>
             </div>
-        </div>
-    </div>
-    <div class="flex pr-5 items-center justify-around text-center h-full">
-        <a
-            href="https://wa.me/542226532910?text=Quiero%20reservar%20un%20turno%20en%20la%20fecha%20y%20hora%20m%C3%A1s%20temprana"
-            target="_blank"
-            class="hover:scale-110 bg-[#fff] transition-all duration-200 ease-in-out scale-90 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 hover:cursor-pointer"
-            type="button"
-        >
-            <div class="w-full h-full flex items-center justify-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#06D570"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-whatsapp"
-                    ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                    ></path><path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"
-                    ></path><path
-                        d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"
-                    ></path></svg
-                >
-            </div>
-        </a>
-        <a
-            href="https://www.instagram.com/kmz.barberia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-            target="_blank"
-            class="hover:scale-110 bg-[#fff] transition-all duration-200 ease-in-out scale-90 shadow-lg font-normal h-10 w-10 items-center justify-center rounded-full outline-none focus:outline-none mr-2"
-            type="button"
-        >
-            <div class="w-full h-full flex items-center justify-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#C72785"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-instagram"
-                    ><path stroke="none" d="M0 0h24v24H0z" fill="none"
-                    ></path><path
-                        d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"
-                    ></path><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
-                    ></path><path d="M16.5 7.5v.01"></path></svg
-                >
-            </div>
-        </a>
+        </nav>
     </div>
 </header>
+
+<!-- Overlay para cerrar menú -->
+<div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[999] hidden transition-opacity duration-300 opacity-0"></div>
+
+<script>
+    const header = document.getElementById('main-header');
+    const headerInner = document.getElementById('header-inner');
+    const headerLogo = document.getElementById('header-logo');
+    const headerTitle = document.getElementById('header-title');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const socialBtns = document.querySelectorAll('.social-btn');
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuIconOpen = document.getElementById('menu-icon-open');
+    const menuIconClose = document.getElementById('menu-icon-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+    const overlay = document.getElementById('menu-overlay');
+
+    let isScrolled = false;
+    let isMenuOpen = false;
+
+    // Función para actualizar el header según el scroll
+    function updateHeader() {
+        const scrollY = window.scrollY;
+        const shouldBeScrolled = scrollY > 50;
+
+        if (shouldBeScrolled !== isScrolled) {
+            isScrolled = shouldBeScrolled;
+
+            if (isScrolled) {
+                // Header compacto con fondo
+                header?.classList.add('bg-[#767676]', 'backdrop-blur-lg', 'shadow-xl');
+                headerInner?.classList.remove('h-[80px]');
+                headerInner?.classList.add('h-[60px]');
+                headerLogo?.classList.remove('w-[60px]', 'md:w-[70px]');
+                headerLogo?.classList.add('w-[45px]', 'md:w-[50px]');
+                headerTitle?.classList.remove('opacity-0', '-translate-x-4');
+                headerTitle?.classList.add('opacity-100', 'translate-x-0');
+
+                // Cambiar estilo de los links
+                navLinks.forEach(link => {
+                    link.classList.remove('text-white/90', 'hover:text-white', 'hover:bg-white/10');
+                    link.classList.add('text-gray-300', 'hover:text-white', 'hover:bg-white/10');
+                });
+
+                // Cambiar estilo de los botones sociales
+                socialBtns.forEach(btn => {
+                    btn.classList.remove('bg-[#767676]');
+                    btn.classList.add('bg-[#767676]');
+                });
+            } else {
+                // Header expandido transparente
+                header?.classList.remove('bg-[#767676]', 'backdrop-blur-lg', 'shadow-xl');
+                headerInner?.classList.remove('h-[60px]');
+                headerInner?.classList.add('h-[80px]');
+                headerLogo?.classList.remove('w-[45px]', 'md:w-[50px]');
+                headerLogo?.classList.add('w-[60px]', 'md:w-[70px]');
+                headerTitle?.classList.remove('opacity-100', 'translate-x-0');
+                headerTitle?.classList.add('opacity-0', '-translate-x-4');
+
+                // Restaurar estilo de los links
+                navLinks.forEach(link => {
+                    link.classList.remove('text-gray-300');
+                    link.classList.add('text-white/90', 'hover:text-white', 'hover:bg-white/10');
+                });
+
+                // Restaurar estilo de los botones sociales
+                socialBtns.forEach(btn => {
+                    btn.classList.remove('bg-[#767676]');
+                    btn.classList.add('bg-[#767676]');
+                });
+            }
+        }
+    }
+
+    // Función para toggle del menú móvil
+    function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
+
+        if (isMenuOpen) {
+            mobileMenu?.classList.remove('hidden');
+            overlay?.classList.remove('hidden');
+            setTimeout(() => {
+                overlay?.classList.remove('opacity-0');
+                overlay?.classList.add('opacity-100');
+            }, 10);
+            menuIconOpen?.classList.add('hidden');
+            menuIconClose?.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        } else {
+            overlay?.classList.remove('opacity-100');
+            overlay?.classList.add('opacity-0');
+            setTimeout(() => {
+                mobileMenu?.classList.add('hidden');
+                overlay?.classList.add('hidden');
+            }, 300);
+            menuIconOpen?.classList.remove('hidden');
+            menuIconClose?.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Cerrar menú
+    function closeMenu() {
+        if (isMenuOpen) {
+            toggleMenu();
+        }
+    }
+
+    // Event listeners
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    menuToggle?.addEventListener('click', toggleMenu);
+    overlay?.addEventListener('click', closeMenu);
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Inicializar
+    updateHeader();
+</script>
