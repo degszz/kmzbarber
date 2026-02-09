@@ -521,6 +521,14 @@ const services = [
 
     const dateStr = formatDateStorage(selectedDate);
     const formattedDate = formatDate(selectedDate);
+    const serviceName = selectedService.name;
+    const timeSlot = selectedTime;
+
+    // Build WhatsApp URL ANTES de cualquier await (importante para iOS)
+    const message = encodeURIComponent(
+      `Hola! Quiero reservar un turno para ${serviceName} el día ${formattedDate} a las ${timeSlot}. Mi nombre es:`
+    );
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 
     // Mostrar loading en el botón
     const confirmBtn = document.getElementById("confirm-booking");
@@ -531,7 +539,7 @@ const services = [
     }
 
     // Guardar en Supabase
-    const success = await saveBooking(dateStr, selectedTime, selectedService.name);
+    const success = await saveBooking(dateStr, timeSlot, serviceName);
 
     if (!success) {
       alert("Error al guardar el turno. Intenta de nuevo.");
@@ -542,15 +550,7 @@ const services = [
       return;
     }
 
-    // Build WhatsApp message
-    const message = encodeURIComponent(
-      `Hola! Quiero reservar un turno para ${selectedService.name} el día ${formattedDate} a las ${selectedTime}. Mi nombre es:`
-    );
-
-    // Open WhatsApp
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
-
-    // Reset state and UI
+    // Reset state and UI ANTES de redirigir
     hideConfirmationModal();
 
     // Restore button
@@ -569,6 +569,12 @@ const services = [
     });
 
     showSection("services");
+
+    // Abrir WhatsApp usando location.href (funciona mejor en iOS/Safari)
+    // Usamos un pequeño delay para asegurar que la UI se actualice primero
+    setTimeout(() => {
+      window.location.href = whatsappUrl;
+    }, 100);
   }
 
   // Admin panel functions (async)
