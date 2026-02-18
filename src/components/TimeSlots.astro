@@ -3,12 +3,18 @@
 ---
 
 <div id="time-slots" class="hidden animate-fade-in">
-  <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+  <h3 class="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
     Horarios disponibles
   </h3>
+
+  <!-- Título del servicio actual que necesita horario -->
+  <p id="slot-service-title" class="text-sm font-semibold text-gray-700 mb-3"></p>
+
+  <!-- Progreso de servicios (chips) -->
+  <div id="slot-progress" class="flex items-center flex-wrap gap-1 mb-4"></div>
 
   <div id="selected-date-display" class="text-gray-600 mb-4 text-sm"></div>
 

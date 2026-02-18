@@ -50,14 +50,14 @@ const services = [
 <section id="servicios" class="w-full max-w-4xl mx-auto px-4 py-8" data-supabase-url={supabaseUrl} data-supabase-key={supabaseKey}>
   <div class="text-center mb-8">
     <h2 class="text-3xl font-bold text-gray-800 mb-2">Reserva tu turno</h2>
-    <p class="text-gray-600">Selecciona un servicio para comenzar</p>
+    <p class="text-gray-600">Agregá uno o más servicios al carrito</p>
   </div>
 
   <!-- Progress Indicator -->
   <div class="flex items-center justify-center mb-8 gap-2">
     <div id="step-1" class="flex flex-col items-center gap-1 text-gray-800 transition-colors" data-step="1">
       <span class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all border-gray-800 bg-gray-800 text-white">1</span>
-      <span class="text-xs font-medium">Servicio</span>
+      <span class="text-xs font-medium">Servicios</span>
     </div>
     <div class="w-12 h-0.5 bg-gray-300 mx-2"></div>
     <div id="step-2" class="flex flex-col items-center gap-1 text-gray-400 transition-colors" data-step="2">
@@ -67,7 +67,7 @@ const services = [
     <div class="w-12 h-0.5 bg-gray-300 mx-2"></div>
     <div id="step-3" class="flex flex-col items-center gap-1 text-gray-400 transition-colors" data-step="3">
       <span class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all border-gray-300">3</span>
-      <span class="text-xs font-medium">Horario</span>
+      <span class="text-xs font-medium">Horarios</span>
     </div>
   </div>
 
@@ -84,16 +84,47 @@ const services = [
     ))}
   </div>
 
+  <!-- Carrito flotante (aparece cuando hay items) -->
+  <div id="cart-bar" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-gray-900 text-white shadow-2xl border-t border-gray-700 animate-slide-in-bottom">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-700 text-white text-sm font-bold shrink-0">
+          <span id="cart-count">0</span>
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs text-gray-400">Total estimado</p>
+          <p id="cart-total" class="text-lg font-bold truncate">$0</p>
+        </div>
+      </div>
+      <div class="flex gap-2 shrink-0">
+        <button id="cart-clear" class="px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-sm transition-colors">
+          Vaciar
+        </button>
+        <button id="cart-checkout" class="px-4 py-2 rounded-lg bg-white text-gray-900 font-semibold hover:bg-gray-100 text-sm transition-colors flex items-center gap-2">
+          Continuar
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Calendar Picker -->
   <CalendarPicker />
 
-  <!-- Time Slots -->
+  <!-- Time Slots (multi-servicio) -->
   <TimeSlots />
 
   <!-- Confirmation Modal -->
   <div id="confirmation-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in animate-duration-200">
-      <h3 class="text-xl font-bold text-gray-800 mb-4">Confirmar reserva</h3>
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-fade-in animate-duration-200 max-h-[90vh] overflow-y-auto">
+      <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        Confirmar reserva
+      </h3>
       <div id="booking-summary" class="space-y-3 mb-6">
         <!-- Summary rendered by JS -->
       </div>
@@ -105,33 +136,72 @@ const services = [
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
-          Confirmar Turno
+          Confirmar por WhatsApp
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Admin Panel (Hidden by default) -->
-  <div id="admin-panel" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden animate-fade-in animate-duration-200">
-      <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-        <h3 class="text-xl font-bold text-gray-800">Panel de Administración</h3>
-        <button id="close-admin" class="text-gray-500 hover:text-gray-700">
+  <!-- Admin Panel -->
+  <div id="admin-panel" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[92vh] sm:max-h-[85vh] overflow-hidden animate-fade-in flex flex-col">
+
+      <!-- Header -->
+      <div class="px-6 pt-6 pb-4 bg-gray-900 text-white flex justify-between items-start shrink-0">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-lg">⚙️</span>
+            <h3 class="text-lg font-bold">Panel de Administración</h3>
+          </div>
+          <p class="text-xs text-gray-400">KMZ Studio · Turnos</p>
+        </div>
+        <button id="close-admin" class="text-gray-400 hover:text-white transition-colors mt-1">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
-      <div class="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
-        <div id="admin-bookings" class="space-y-3">
-          <!-- Bookings list rendered by JS -->
+
+      <!-- Stats bar -->
+      <div id="admin-stats" class="flex gap-0 border-b border-gray-100 shrink-0 bg-gray-50">
+        <div class="flex-1 px-4 py-3 text-center border-r border-gray-100">
+          <p id="stat-total" class="text-xl font-black text-gray-900">–</p>
+          <p class="text-[10px] text-gray-500 uppercase tracking-wide">Hoy</p>
         </div>
-        <div id="no-bookings" class="hidden text-center text-gray-500 py-8">
-          No hay turnos reservados
+        <div class="flex-1 px-4 py-3 text-center border-r border-gray-100">
+          <p id="stat-upcoming" class="text-xl font-black text-gray-900">–</p>
+          <p class="text-[10px] text-gray-500 uppercase tracking-wide">Próximos</p>
+        </div>
+        <div class="flex-1 px-4 py-3 text-center">
+          <p id="stat-multi" class="text-xl font-black text-gray-900">–</p>
+          <p class="text-[10px] text-gray-500 uppercase tracking-wide">Multi-serv.</p>
         </div>
       </div>
-      <div class="p-4 border-t border-gray-200">
-        <button id="clear-all-bookings" class="w-full py-2 px-4 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors">
+
+      <!-- Filter tabs -->
+      <div class="flex gap-1 px-4 py-2 border-b border-gray-100 shrink-0 bg-white">
+        <button class="admin-tab active-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-gray-900 text-white" data-tab="all">Todos</button>
+        <button class="admin-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-gray-500 hover:bg-gray-100" data-tab="today">Hoy</button>
+        <button class="admin-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-gray-500 hover:bg-gray-100" data-tab="upcoming">Próximos</button>
+        <button class="admin-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-gray-500 hover:bg-gray-100" data-tab="multi">Multi-serv.</button>
+      </div>
+
+      <!-- Bookings list -->
+      <div class="flex-1 overflow-y-auto p-4">
+        <div id="admin-bookings" class="space-y-2"></div>
+        <div id="no-bookings" class="hidden text-center text-gray-400 py-12">
+          <div class="text-4xl mb-3">📭</div>
+          <p class="font-medium text-gray-500">No hay turnos</p>
+          <p class="text-sm text-gray-400 mt-1">Los turnos pasados se eliminan automáticamente</p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-4 border-t border-gray-100 bg-gray-50 shrink-0">
+        <button id="clear-all-bookings" class="w-full py-2.5 px-4 rounded-xl border-2 border-red-200 text-red-600 font-medium hover:bg-red-50 transition-colors text-sm flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
           Limpiar todos los turnos
         </button>
       </div>
@@ -139,11 +209,9 @@ const services = [
   </div>
 </section>
 
-<!-- Admin Access (Triple click on title) -->
-<div id="admin-trigger" class="fixed bottom-4 right-4 opacity-0 hover:opacity-100 transition-opacity">
-  <button id="open-admin" class="text-xs text-gray-400 hover:text-gray-600">
-    Admin
-  </button>
+<!-- Admin Access -->
+<div id="admin-trigger" class="fixed bottom-4 right-4 opacity-0 hover:opacity-100 transition-opacity z-30">
+  <button id="open-admin" class="text-xs text-gray-400 hover:text-gray-600">Admin</button>
 </div>
 
 
@@ -158,13 +226,11 @@ const services = [
 
   // ========== BOOKING SYSTEM ==========
 
-  // Time slots configuration
   const MORNING_SLOTS = [
     { start: "10:00", end: "10:40" },
     { start: "10:40", end: "11:20" },
     { start: "11:20", end: "12:00" },
   ];
-
   const AFTERNOON_SLOTS = [
     { start: "14:00", end: "14:40" },
     { start: "14:40", end: "15:20" },
@@ -176,188 +242,177 @@ const services = [
     { start: "18:40", end: "19:20" },
     { start: "19:20", end: "20:00" },
   ];
+  const ALL_SLOTS = [...MORNING_SLOTS, ...AFTERNOON_SLOTS];
 
   const WHATSAPP_NUMBER = "5492226532910";
   const ADMIN_PASSWORD = "kmz2024";
 
-  // State
-  let selectedService: { id: string; name: string; price: number; duration: string } | null = null;
+  // ========== ESTADO DEL CARRITO ==========
+  // cart: array de { id, name, price, duration }
+  // cartSlots: array de { serviceIndex, time } — un slot por item del carrito
+  interface CartItem { id: string; name: string; price: number; duration: string; }
+  interface CartSlot { serviceIndex: number; time: string; }
+
+  let cart: CartItem[] = [];
+  let cartSlots: CartSlot[] = []; // slots asignados a cada item del carrito
   let selectedDate: Date | null = null;
-  let selectedTime: string | null = null;
+  let currentSlotIndex: number = 0; // índice del item del carrito al que estamos asignando horario
 
   // ========== SUPABASE FUNCTIONS ==========
-
-  // Obtener todos los turnos
   async function getBookings(): Promise<Array<{fecha: string; hora: string; servicio: string}>> {
-    const { data, error } = await supabase
-      .from('turnos')
-      .select('fecha, hora, servicio');
-    if (error) {
-      console.error('Error fetching bookings:', error);
-      return [];
-    }
+    const { data, error } = await supabase.from('turnos').select('fecha, hora, servicio');
+    if (error) return [];
     return data || [];
   }
 
-  // Guardar un turno
   async function saveBooking(fecha: string, hora: string, servicio: string): Promise<boolean> {
-    const { error } = await supabase
-      .from('turnos')
-      .insert([{ fecha, hora, servicio }]);
-    if (error) {
-      console.error('Error saving booking:', error);
-      return false;
-    }
-    return true;
-  }
-
-  // Verificar si un horario está ocupado
-  async function isSlotBooked(fecha: string, hora: string): Promise<boolean> {
-    const { data, error } = await supabase
-      .from('turnos')
-      .select('id')
-      .eq('fecha', fecha)
-      .eq('hora', hora)
-      .maybeSingle();
-    if (error) {
-      console.error('Error checking slot:', error);
-      return false;
-    }
-    return data !== null;
-  }
-
-  // Eliminar un turno (para admin)
-  async function removeBooking(fecha: string, hora: string): Promise<boolean> {
-    const { error } = await supabase
-      .from('turnos')
-      .delete()
-      .eq('fecha', fecha)
-      .eq('hora', hora);
-    if (error) {
-      console.error('Error removing booking:', error);
-      return false;
-    }
-    return true;
-  }
-
-  // Limpiar todos los turnos (para admin)
-  async function clearAllBookings(): Promise<boolean> {
-    const { error } = await supabase
-      .from('turnos')
-      .delete()
-      .neq('id', '00000000-0000-0000-0000-000000000000');
+    const { error } = await supabase.from('turnos').insert([{ fecha, hora, servicio }]);
     return !error;
   }
 
-  // ========== REALTIME SUBSCRIPTION ==========
-  const channel = supabase
-    .channel('turnos-changes')
-    .on('postgres_changes',
-      { event: '*', schema: 'public', table: 'turnos' },
-      (payload) => {
-        console.log('Cambio en turnos:', payload);
-        // Si hay una fecha seleccionada, re-renderizar los horarios
-        if (selectedDate) {
-          renderTimeSlots(selectedDate);
-        }
-      }
-    )
-    .subscribe();
+  async function removeBooking(fecha: string, hora: string): Promise<boolean> {
+    const { error } = await supabase.from('turnos').delete().eq('fecha', fecha).eq('hora', hora);
+    return !error;
+  }
 
-  // ========== UTILITY FUNCTIONS ==========
+  async function clearAllBookings(): Promise<boolean> {
+    const { error } = await supabase.from('turnos').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    return !error;
+  }
 
-  // Format date for display
+  // ========== REALTIME ==========
+  supabase.channel('turnos-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'turnos' }, () => {
+      if (selectedDate) renderTimeSlots(selectedDate);
+    }).subscribe();
+
+  // ========== UTILS ==========
   function formatDate(date: Date): string {
-    const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const days = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+    const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
     return `${days[date.getDay()]} ${date.getDate()} de ${months[date.getMonth()]}`;
   }
 
-  // Format date for storage (YYYY-MM-DD)
   function formatDateStorage(date: Date): string {
-    return date.toISOString().split("T")[0];
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 
-  // Update step indicators
   function updateSteps(currentStep: number) {
     for (let i = 1; i <= 3; i++) {
       const step = document.getElementById(`step-${i}`);
-      if (step) {
-        const numberEl = step.querySelector("span:first-child");
-
-        // Reset classes
-        step.classList.remove("text-gray-800", "text-green-600", "text-gray-400");
-        numberEl?.classList.remove("border-gray-800", "bg-gray-800", "text-white", "border-green-600", "bg-green-600", "border-gray-300");
-
-        if (i < currentStep) {
-          // Completed
-          step.classList.add("text-green-600");
-          numberEl?.classList.add("border-green-600", "bg-green-600", "text-white");
-        } else if (i === currentStep) {
-          // Active
-          step.classList.add("text-gray-800");
-          numberEl?.classList.add("border-gray-800", "bg-gray-800", "text-white");
-        } else {
-          // Inactive
-          step.classList.add("text-gray-400");
-          numberEl?.classList.add("border-gray-300");
-        }
+      if (!step) continue;
+      const num = step.querySelector("span:first-child");
+      step.classList.remove("text-gray-800","text-green-600","text-gray-400");
+      num?.classList.remove("border-gray-800","bg-gray-800","text-white","border-green-600","bg-green-600","border-gray-300");
+      if (i < currentStep) {
+        step.classList.add("text-green-600");
+        num?.classList.add("border-green-600","bg-green-600","text-white");
+      } else if (i === currentStep) {
+        step.classList.add("text-gray-800");
+        num?.classList.add("border-gray-800","bg-gray-800","text-white");
+      } else {
+        step.classList.add("text-gray-400");
+        num?.classList.add("border-gray-300");
       }
     }
   }
 
-  // Show specific section
-  function showSection(section: "services" | "calendar" | "timeslots") {
-    const servicesGrid = document.getElementById("services-grid");
-    const calendarPicker = document.getElementById("calendar-picker");
-    const timeSlots = document.getElementById("time-slots");
+  function showSection(sec: "services" | "calendar" | "timeslots") {
+    document.getElementById("services-grid")?.classList.add("hidden");
+    document.getElementById("cart-bar")?.classList.add("hidden");
+    document.getElementById("calendar-picker")?.classList.add("hidden");
+    document.getElementById("time-slots")?.classList.add("hidden");
 
-    servicesGrid?.classList.add("hidden");
-    calendarPicker?.classList.add("hidden");
-    timeSlots?.classList.add("hidden");
-
-    if (section === "services") {
-      servicesGrid?.classList.remove("hidden");
+    if (sec === "services") {
+      document.getElementById("services-grid")?.classList.remove("hidden");
+      updateCartBar(); // muestra/oculta el carrito
       updateSteps(1);
-    } else if (section === "calendar") {
-      calendarPicker?.classList.remove("hidden");
+    } else if (sec === "calendar") {
+      document.getElementById("calendar-picker")?.classList.remove("hidden");
       renderCalendar();
       updateSteps(2);
-    } else if (section === "timeslots") {
-      timeSlots?.classList.remove("hidden");
+    } else if (sec === "timeslots") {
+      document.getElementById("time-slots")?.classList.remove("hidden");
       if (selectedDate) renderTimeSlots(selectedDate);
       updateSteps(3);
     }
   }
 
-  // Render calendar days
+  // ========== CARRITO ==========
+  function updateCartBar() {
+    const bar = document.getElementById("cart-bar");
+    const countEl = document.getElementById("cart-count");
+    const totalEl = document.getElementById("cart-total");
+    if (!bar || !countEl || !totalEl) return;
+
+    if (cart.length === 0) {
+      bar.classList.add("hidden");
+    } else {
+      bar.classList.remove("hidden");
+      countEl.textContent = String(cart.length);
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      totalEl.textContent = `$${total.toLocaleString("es-AR")}`;
+    }
+
+    // Actualizar badges en las cards
+    document.querySelectorAll(".service-card").forEach((card) => {
+      const el = card as HTMLElement;
+      const id = el.dataset.serviceId || "";
+      const count = cart.filter(i => i.id === id).length;
+      const badge = el.querySelector(".service-cart-badge") as HTMLElement | null;
+      if (badge) {
+        if (count > 0) {
+          badge.textContent = String(count);
+          badge.classList.remove("hidden");
+          badge.classList.add("flex");
+          el.dataset.selected = "true";
+        } else {
+          badge.classList.add("hidden");
+          badge.classList.remove("flex");
+          el.dataset.selected = "false";
+        }
+      }
+    });
+  }
+
+  function addToCart(item: CartItem) {
+    cart.push(item);
+    updateCartBar();
+  }
+
+  function clearCart() {
+    cart = [];
+    cartSlots = [];
+    currentSlotIndex = 0;
+    updateCartBar();
+  }
+
+  // ========== CALENDAR ==========
   function renderCalendar() {
     const container = document.getElementById("calendar-days");
     if (!container) return;
-
     container.innerHTML = "";
     const today = new Date();
-    const days = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
-    const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const days = ["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
+    const months = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
     for (let i = 0; i < 7; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
-
       const isToday = i === 0;
 
       const dayCard = document.createElement("div");
-      dayCard.className = `
-        flex flex-col items-center justify-center
-        min-w-[85px] min-h-[100px] p-4
-        rounded-2xl cursor-pointer
-        transition-all duration-300 ease-out
-        hover:scale-110 hover:shadow-xl
-        ${isToday
-          ? 'bg-gradient-to-br from-gray-700 to-gray-800 text-white shadow-lg border-2 border-gray-600'
-          : 'bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300 hover:border-gray-500 hover:from-gray-200 hover:to-gray-300'
-        }
-      `.replace(/\s+/g, ' ').trim();
+      dayCard.className = [
+        "flex flex-col items-center justify-center",
+        "min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer",
+        "transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl",
+        isToday
+          ? "bg-gradient-to-br from-gray-700 to-gray-800 text-white shadow-lg border-2 border-gray-600"
+          : "bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300 hover:border-gray-500"
+      ].join(" ");
       dayCard.dataset.date = formatDateStorage(date);
 
       dayCard.innerHTML = `
@@ -368,32 +423,21 @@ const services = [
       `;
 
       dayCard.addEventListener("click", () => {
-        // Remove previous selection
-        container.querySelectorAll("[data-date]").forEach((card) => {
-          const cardEl = card as HTMLElement;
-          const cardDate = cardEl.dataset.date;
-          const cardIsToday = cardDate === formatDateStorage(today);
-
-          if (cardIsToday) {
-            cardEl.className = 'flex flex-col items-center justify-center min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl bg-gradient-to-br from-gray-700 to-gray-800 text-white shadow-lg border-2 border-gray-600';
-          } else {
-            cardEl.className = 'flex flex-col items-center justify-center min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300 hover:border-gray-500 hover:from-gray-200 hover:to-gray-300';
-          }
+        container.querySelectorAll("[data-date]").forEach((c) => {
+          const ce = c as HTMLElement;
+          const cIsToday = ce.dataset.date === formatDateStorage(today);
+          ce.className = [
+            "flex flex-col items-center justify-center min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer",
+            "transition-all duration-300 ease-out hover:scale-110 hover:shadow-xl",
+            cIsToday
+              ? "bg-gradient-to-br from-gray-700 to-gray-800 text-white shadow-lg border-2 border-gray-600"
+              : "bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300 hover:border-gray-500"
+          ].join(" ");
         });
-
-        // Apply selected state
-        dayCard.className = 'flex flex-col items-center justify-center min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-2xl border-2 border-gray-700 scale-105';
-
-        // Update text colors for selected
-        const spans = dayCard.querySelectorAll('span');
-        spans[0]?.classList.remove('text-gray-500', 'text-gray-300');
-        spans[0]?.classList.add('text-gray-300');
-        spans[1]?.classList.remove('text-gray-800');
-        spans[1]?.classList.add('text-white');
-        spans[2]?.classList.remove('text-gray-500', 'text-gray-300');
-        spans[2]?.classList.add('text-gray-300');
-
+        dayCard.className = "flex flex-col items-center justify-center min-w-[85px] min-h-[100px] p-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-2xl border-2 border-gray-700 scale-105";
         selectedDate = date;
+        cartSlots = [];
+        currentSlotIndex = 0;
         showSection("timeslots");
       });
 
@@ -401,136 +445,169 @@ const services = [
     }
   }
 
-  // Render time slots (async - fetches from Supabase)
+  // ========== TIME SLOTS (multi-servicio) ==========
   async function renderTimeSlots(date: Date) {
     const morningContainer = document.getElementById("morning-slots");
     const afternoonContainer = document.getElementById("afternoon-slots");
     const dateDisplay = document.getElementById("selected-date-display");
+    const slotTitle = document.getElementById("slot-service-title");
+    const slotProgress = document.getElementById("slot-progress");
 
     if (!morningContainer || !afternoonContainer) return;
 
-    if (dateDisplay) {
-      dateDisplay.textContent = formatDate(date);
+    // Titulo del servicio actual que necesita horario
+    if (slotTitle) {
+      const current = cart[currentSlotIndex];
+      slotTitle.textContent = current
+        ? `Elegí horario para: ${current.name} (${currentSlotIndex + 1} de ${cart.length})`
+        : "";
     }
 
-    const dateStr = formatDateStorage(date);
+    // Progresito de servicios
+    if (slotProgress) {
+      slotProgress.innerHTML = cart.map((item, idx) => {
+        const assigned = cartSlots.find(s => s.serviceIndex === idx);
+        const isCurrent = idx === currentSlotIndex;
+        return `<div class="flex items-center gap-1.5 text-xs ${isCurrent ? 'font-bold text-gray-800' : assigned ? 'text-green-600' : 'text-gray-400'}">
+          <span class="w-5 h-5 rounded-full flex items-center justify-center border ${isCurrent ? 'border-gray-800 bg-gray-800 text-white' : assigned ? 'border-green-500 bg-green-500 text-white' : 'border-gray-300'}">
+            ${assigned ? '✓' : idx + 1}
+          </span>
+          <span class="hidden sm:inline truncate max-w-[100px]">${item.name}</span>
+        </div>`;
+      }).join('<div class="w-4 h-0.5 bg-gray-300 mx-0.5"></div>');
+    }
 
-    // Mostrar loading
-    morningContainer.innerHTML = '<div class="col-span-full text-center text-gray-500">Cargando...</div>';
+    if (dateDisplay) dateDisplay.textContent = formatDate(date);
+
+    const dateStr = formatDateStorage(date);
+    morningContainer.innerHTML = '<div class="col-span-full text-center text-gray-500 py-4">Cargando...</div>';
     afternoonContainer.innerHTML = '';
 
-    // Obtener todos los turnos de esa fecha de una vez
     const { data: bookedSlots } = await supabase
-      .from('turnos')
-      .select('hora')
-      .eq('fecha', dateStr);
+      .from('turnos').select('hora').eq('fecha', dateStr);
 
-    const bookedHours = new Set((bookedSlots || []).map(s => s.hora));
+    const bookedHours = new Set((bookedSlots || []).map((s: {hora: string}) => s.hora));
+    // También tachar los slots ya asignados a otros servicios del carrito
+    const assignedHours = new Set(cartSlots.map(s => s.time));
 
-    // Render morning slots
     morningContainer.innerHTML = "";
     MORNING_SLOTS.forEach((slot) => {
       const isBooked = bookedHours.has(slot.start);
-      const slotEl = createSlotElement(slot.start, slot.end, isBooked);
-      morningContainer.appendChild(slotEl);
+      const isAssigned = assignedHours.has(slot.start);
+      morningContainer.appendChild(createSlotElement(slot.start, slot.end, isBooked, isAssigned));
     });
 
-    // Render afternoon slots
     afternoonContainer.innerHTML = "";
     AFTERNOON_SLOTS.forEach((slot) => {
       const isBooked = bookedHours.has(slot.start);
-      const slotEl = createSlotElement(slot.start, slot.end, isBooked);
-      afternoonContainer.appendChild(slotEl);
+      const isAssigned = assignedHours.has(slot.start);
+      afternoonContainer.appendChild(createSlotElement(slot.start, slot.end, isBooked, isAssigned));
     });
   }
 
-  // Create slot element
-  function createSlotElement(start: string, end: string, isBooked: boolean): HTMLElement {
+  function createSlotElement(start: string, end: string, isBooked: boolean, isAssigned: boolean): HTMLElement {
     const slot = document.createElement("button");
-
-    const baseClasses = "flex items-center justify-center py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 ease-out";
+    const base = "flex flex-col items-center justify-center py-3 px-2 rounded-lg border-2 font-medium transition-all duration-200 ease-out text-sm";
 
     if (isBooked) {
-      slot.className = `${baseClasses} bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed line-through`;
+      slot.className = `${base} bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed line-through`;
+      slot.disabled = true;
+    } else if (isAssigned) {
+      // Slot ya elegido para otro servicio del carrito
+      const serviceIdx = cartSlots.find(s => s.time === start)?.serviceIndex ?? -1;
+      const serviceName = serviceIdx >= 0 ? cart[serviceIdx]?.name.split(" ")[0] : "";
+      slot.className = `${base} bg-amber-50 border-amber-400 text-amber-700 cursor-not-allowed`;
+      slot.disabled = true;
+      slot.innerHTML = `<span class="line-through opacity-60">${start} - ${end}</span><span class="text-[10px] mt-0.5 text-amber-600">${serviceName}</span>`;
     } else {
-      slot.className = `${baseClasses} bg-white border-gray-200 text-gray-700 cursor-pointer hover:scale-105 hover:shadow-md hover:border-gray-400`;
+      slot.className = `${base} bg-white border-gray-200 text-gray-700 cursor-pointer hover:scale-105 hover:shadow-md hover:border-gray-400`;
+      slot.textContent = `${start} - ${end}`;
+      slot.addEventListener("click", () => onSlotClick(start));
     }
 
-    slot.dataset.time = start;
-    slot.textContent = `${start} - ${end}`;
-
-    if (!isBooked) {
-      slot.addEventListener("click", () => {
-        // Remove previous selection
-        document.querySelectorAll("[data-time]").forEach((s) => {
-          const el = s as HTMLElement;
-          if (!el.classList.contains("line-through")) {
-            el.classList.remove("border-gray-800", "bg-gray-800", "text-white", "shadow-md");
-            el.classList.add("border-gray-200", "bg-white", "text-gray-700");
-          }
-        });
-
-        slot.classList.remove("border-gray-200", "bg-white", "text-gray-700");
-        slot.classList.add("border-gray-800", "bg-gray-800", "text-white", "shadow-md");
-        selectedTime = start;
-        showConfirmationModal();
-      });
-    }
-
+    if (!isBooked && !isAssigned) slot.dataset.time = start;
     return slot;
   }
 
-  // Show confirmation modal
+  function onSlotClick(time: string) {
+    // Asignar este horario al servicio actual
+    cartSlots = cartSlots.filter(s => s.serviceIndex !== currentSlotIndex);
+    cartSlots.push({ serviceIndex: currentSlotIndex, time });
+
+    // ¿Hay más servicios sin horario?
+    const nextUnassigned = cart.findIndex((_, idx) =>
+      idx > currentSlotIndex && !cartSlots.find(s => s.serviceIndex === idx)
+    );
+
+    if (nextUnassigned !== -1) {
+      // Pasar al siguiente servicio
+      currentSlotIndex = nextUnassigned;
+      if (selectedDate) renderTimeSlots(selectedDate);
+    } else {
+      // Todos los servicios tienen horario → mostrar resumen
+      showConfirmationModal();
+    }
+  }
+
+  // ========== MODAL CONFIRMACIÓN ==========
   function showConfirmationModal() {
     const modal = document.getElementById("confirmation-modal");
     const summary = document.getElementById("booking-summary");
+    if (!modal || !summary || !selectedDate) return;
 
-    if (!modal || !summary || !selectedService || !selectedDate || !selectedTime) return;
+    const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
 
     summary.innerHTML = `
-      <div class="flex justify-between items-center py-2 border-b border-gray-100">
-        <span class="text-gray-600">Servicio</span>
-        <span class="font-medium text-gray-800">${selectedService.name}</span>
+      <div class="bg-gray-50 rounded-xl p-3 mb-3">
+        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">📅 Fecha</p>
+        <p class="font-medium text-gray-800">${formatDate(selectedDate)}</p>
       </div>
-      <div class="flex justify-between items-center py-2 border-b border-gray-100">
-        <span class="text-gray-600">Precio</span>
-        <span class="font-medium text-gray-800">$${selectedService.price.toLocaleString("es-AR")}</span>
+      <div class="space-y-2">
+        ${cart.map((item, idx) => {
+          const slot = cartSlots.find(s => s.serviceIndex === idx);
+          const slotInfo = ALL_SLOTS.find(s => s.start === slot?.time);
+          return `
+            <div class="flex justify-between items-start py-2 border-b border-gray-100 last:border-0">
+              <div>
+                <p class="font-medium text-gray-800 text-sm">${item.name}</p>
+                <p class="text-xs text-gray-500">⏰ ${slot?.time || '?'} - ${slotInfo?.end || '?'}</p>
+              </div>
+              <span class="font-bold text-gray-900 text-sm">$${item.price.toLocaleString("es-AR")}</span>
+            </div>
+          `;
+        }).join("")}
       </div>
-      <div class="flex justify-between items-center py-2 border-b border-gray-100">
-        <span class="text-gray-600">Fecha</span>
-        <span class="font-medium text-gray-800">${formatDate(selectedDate)}</span>
-      </div>
-      <div class="flex justify-between items-center py-2">
-        <span class="text-gray-600">Horario</span>
-        <span class="font-medium text-gray-800">${selectedTime}</span>
+      <div class="flex justify-between items-center pt-3 mt-2 border-t-2 border-gray-200">
+        <span class="font-bold text-gray-700">Total</span>
+        <span class="text-xl font-black text-gray-900">$${totalPrice.toLocaleString("es-AR")}</span>
       </div>
     `;
 
     modal.classList.remove("hidden");
   }
 
-  // Hide confirmation modal
   function hideConfirmationModal() {
-    const modal = document.getElementById("confirmation-modal");
-    modal?.classList.add("hidden");
+    document.getElementById("confirmation-modal")?.classList.add("hidden");
   }
 
-  // Confirm booking and open WhatsApp (async)
+  // ========== CONFIRMAR Y ENVIAR WS ==========
   async function confirmBooking() {
-    if (!selectedService || !selectedDate || !selectedTime) return;
+    if (!selectedDate || cart.length === 0 || cartSlots.length !== cart.length) return;
 
     const dateStr = formatDateStorage(selectedDate);
     const formattedDate = formatDate(selectedDate);
-    const serviceName = selectedService.name;
-    const timeSlot = selectedTime;
 
-    // Build WhatsApp URL ANTES de cualquier await (importante para iOS)
+    // Armar mensaje WS antes de los awaits (iOS)
+    const lines = cart.map((item, idx) => {
+      const slot = cartSlots.find(s => s.serviceIndex === idx);
+      return `• ${item.name} a las ${slot?.time || '?'}`;
+    }).join('\n');
+    const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
     const message = encodeURIComponent(
-      `Hola! Quiero reservar un turno para ${serviceName} el día ${formattedDate} a las ${timeSlot}. Mi nombre es:`
+      `Hola! Quiero reservar los siguientes turnos para el ${formattedDate}:\n${lines}\nTotal: $${totalPrice.toLocaleString("es-AR")}\nMi nombre es:`
     );
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 
-    // Mostrar loading en el botón
     const confirmBtn = document.getElementById("confirm-booking");
     const originalContent = confirmBtn?.innerHTML || '';
     if (confirmBtn) {
@@ -538,10 +615,15 @@ const services = [
       confirmBtn.setAttribute("disabled", "true");
     }
 
-    // Guardar en Supabase
-    const success = await saveBooking(dateStr, timeSlot, serviceName);
+    // Guardar todos los turnos en Supabase
+    const allServices = cart.map(item => item.name).join(" + ");
+    let allOk = true;
+    for (const slot of cartSlots) {
+      const ok = await saveBooking(dateStr, slot.time, cart[slot.serviceIndex]?.name || allServices);
+      if (!ok) { allOk = false; break; }
+    }
 
-    if (!success) {
+    if (!allOk) {
       alert("Error al guardar el turno. Intenta de nuevo.");
       if (confirmBtn) {
         confirmBtn.innerHTML = originalContent;
@@ -550,171 +632,314 @@ const services = [
       return;
     }
 
-    // Reset state and UI ANTES de redirigir
     hideConfirmationModal();
-
-    // Restore button
     if (confirmBtn) {
       confirmBtn.innerHTML = originalContent;
       confirmBtn.removeAttribute("disabled");
     }
 
-    selectedService = null;
+    clearCart();
     selectedDate = null;
-    selectedTime = null;
-
-    // Clear selections
-    document.querySelectorAll(".service-card").forEach((card) => {
-      (card as HTMLElement).dataset.selected = "false";
-    });
-
+    currentSlotIndex = 0;
+    cartSlots = [];
     showSection("services");
 
-    // Abrir WhatsApp usando location.href (funciona mejor en iOS/Safari)
-    // Usamos un pequeño delay para asegurar que la UI se actualice primero
-    setTimeout(() => {
-      window.location.href = whatsappUrl;
-    }, 100);
+    setTimeout(() => { window.location.href = whatsappUrl; }, 100);
   }
 
-  // Admin panel functions (async)
-  async function showAdminPanel() {
-    const password = prompt("Ingresa la contraseña de administrador:");
-    if (password !== ADMIN_PASSWORD) {
-      if (password !== null) alert("Contraseña incorrecta");
+  // ========== ADMIN ==========
+  let adminAuthenticated = false;
+  let adminCurrentTab = "all";
+  let adminAllBookings: Array<{fecha: string; hora: string; servicio: string}> = [];
+
+  function getNowArgentina(): { dateStr: string; timeStr: string } {
+    // Argentina = UTC-3 (no DST)
+    const now = new Date();
+    const ar = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    const y = ar.getUTCFullYear();
+    const m = String(ar.getUTCMonth() + 1).padStart(2, '0');
+    const d = String(ar.getUTCDate()).padStart(2, '0');
+    const h = String(ar.getUTCHours()).padStart(2, '0');
+    const min = String(ar.getUTCMinutes()).padStart(2, '0');
+    return { dateStr: `${y}-${m}-${d}`, timeStr: `${h}:${min}` };
+  }
+
+  function isBookingPast(fecha: string, hora: string): boolean {
+    const { dateStr, timeStr } = getNowArgentina();
+    if (fecha < dateStr) return true;
+    if (fecha === dateStr && hora < timeStr) return true;
+    return false;
+  }
+
+  async function cleanupPastBookings(bookings: Array<{fecha: string; hora: string; servicio: string}>) {
+    const past = bookings.filter(b => isBookingPast(b.fecha, b.hora));
+    for (const b of past) {
+      await removeBooking(b.fecha, b.hora);
+    }
+    return past.length;
+  }
+
+  function getTodayStr(): string {
+    return getNowArgentina().dateStr;
+  }
+
+  function groupByClient(bookings: Array<{fecha: string; hora: string; servicio: string}>) {
+    // Agrupar turnos del mismo día/cliente (misma fecha, horas consecutivas)
+    // Para detectar multi-servicio: misma fecha, múltiples registros con horarios muy cercanos
+    const groups: Record<string, typeof bookings> = {};
+    bookings.forEach(b => {
+      const key = b.fecha;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(b);
+    });
+    return groups;
+  }
+
+  function renderAdminBookings(tab = adminCurrentTab) {
+    adminCurrentTab = tab;
+    const bookingsContainer = document.getElementById("admin-bookings");
+    const noBookings = document.getElementById("no-bookings");
+    if (!bookingsContainer || !noBookings) return;
+
+    const todayStr = getTodayStr();
+
+    let filtered = [...adminAllBookings];
+    if (tab === "today") {
+      filtered = adminAllBookings.filter(b => b.fecha === todayStr);
+    } else if (tab === "upcoming") {
+      filtered = adminAllBookings.filter(b => b.fecha > todayStr);
+    } else if (tab === "multi") {
+      // Mostrar solo fechas con más de 1 turno
+      const groups = groupByClient(adminAllBookings);
+      filtered = adminAllBookings.filter(b => (groups[b.fecha]?.length ?? 0) > 1);
+    }
+
+    // Update tab active styles
+    document.querySelectorAll(".admin-tab").forEach((t) => {
+      const te = t as HTMLElement;
+      const isActive = te.dataset.tab === tab;
+      te.className = `admin-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${isActive ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'}`;
+    });
+
+    if (filtered.length === 0) {
+      bookingsContainer.classList.add("hidden");
+      noBookings.classList.remove("hidden");
       return;
+    }
+
+    bookingsContainer.classList.remove("hidden");
+    noBookings.classList.add("hidden");
+
+    // Group by date for display
+    const byDate: Record<string, typeof filtered> = {};
+    filtered.forEach(b => {
+      if (!byDate[b.fecha]) byDate[b.fecha] = [];
+      byDate[b.fecha].push(b);
+    });
+
+    const dayNames = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+    const monthNames = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+    bookingsContainer.innerHTML = Object.entries(byDate)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([fecha, items]) => {
+        const [y, mo, d] = fecha.split('-').map(Number);
+        const dateObj = new Date(y, mo - 1, d);
+        const dayLabel = fecha === todayStr
+          ? '<span class="bg-gray-900 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Hoy</span>'
+          : `<span class="text-xs text-gray-500">${dayNames[dateObj.getDay()]} ${d} ${monthNames[mo-1]}</span>`;
+
+        const isMulti = items.length > 1;
+
+        const itemsHtml = items
+          .sort((a, b) => a.hora.localeCompare(b.hora))
+          .map(b => `
+            <div class="flex items-center justify-between gap-3 py-2.5 px-3 rounded-xl bg-white border border-gray-100 hover:border-gray-300 transition-all group">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-gray-100 flex flex-col items-center justify-center shrink-0">
+                  <span class="text-[10px] font-bold text-gray-500 leading-none">${b.hora.split(':')[0]}</span>
+                  <span class="text-[9px] text-gray-400 leading-none">${b.hora.split(':')[1]}hs</span>
+                </div>
+                <div class="min-w-0">
+                  <p class="font-semibold text-gray-800 text-sm leading-snug truncate">${b.servicio}</p>
+                  <p class="text-xs text-gray-400">${b.hora} hs</p>
+                </div>
+              </div>
+              <button
+                class="remove-booking shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
+                data-fecha="${b.fecha}" data-hora="${b.hora}"
+                title="Eliminar turno"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          `).join("");
+
+        return `
+          <div class="mb-4">
+            <div class="flex items-center gap-2 mb-2 px-1">
+              ${dayLabel}
+              ${isMulti ? `<span class="bg-amber-100 text-amber-700 text-[10px] px-2 py-0.5 rounded-full font-bold">✦ ${items.length} servicios</span>` : ''}
+            </div>
+            <div class="space-y-1.5">${itemsHtml}</div>
+          </div>
+        `;
+      }).join("");
+
+    // Remove buttons — sin confirm, ya estás autenticado
+    bookingsContainer.querySelectorAll(".remove-booking").forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const fecha = target.dataset.fecha || "";
+        const hora = target.dataset.hora || "";
+        // Animación de salida
+        const row = target.closest(".flex.items-center.justify-between") as HTMLElement | null;
+        if (row) {
+          row.style.opacity = "0.4";
+          row.style.pointerEvents = "none";
+        }
+        const ok = await removeBooking(fecha, hora);
+        if (ok) {
+          adminAllBookings = adminAllBookings.filter(b => !(b.fecha === fecha && b.hora === hora));
+          updateAdminStats();
+          renderAdminBookings(adminCurrentTab);
+        } else {
+          if (row) { row.style.opacity = "1"; row.style.pointerEvents = ""; }
+          alert("Error al eliminar");
+        }
+      });
+    });
+  }
+
+  function updateAdminStats() {
+    const todayStr = getTodayStr();
+    const todayCount = adminAllBookings.filter(b => b.fecha === todayStr).length;
+    const upcomingCount = adminAllBookings.filter(b => b.fecha > todayStr).length;
+    const groups = groupByClient(adminAllBookings);
+    const multiCount = Object.values(groups).filter(g => g.length > 1).length;
+
+    const el = (id: string) => document.getElementById(id);
+    const statTotal = el("stat-total");
+    const statUpcoming = el("stat-upcoming");
+    const statMulti = el("stat-multi");
+    if (statTotal) statTotal.textContent = String(todayCount);
+    if (statUpcoming) statUpcoming.textContent = String(upcomingCount);
+    if (statMulti) statMulti.textContent = String(multiCount);
+  }
+
+  async function showAdminPanel() {
+    if (!adminAuthenticated) {
+      const password = prompt("Contraseña de administrador:");
+      if (password !== ADMIN_PASSWORD) {
+        if (password !== null) alert("Contraseña incorrecta");
+        return;
+      }
+      adminAuthenticated = true;
     }
 
     const panel = document.getElementById("admin-panel");
     const bookingsContainer = document.getElementById("admin-bookings");
-    const noBookings = document.getElementById("no-bookings");
+    if (!panel || !bookingsContainer) return;
 
-    if (!panel || !bookingsContainer || !noBookings) return;
-
-    // Show loading
-    bookingsContainer.innerHTML = '<div class="text-center text-gray-500 py-4">Cargando turnos...</div>';
-    bookingsContainer.classList.remove("hidden");
-    noBookings.classList.add("hidden");
     panel.classList.remove("hidden");
+    bookingsContainer.innerHTML = `
+      <div class="flex flex-col items-center justify-center py-10 gap-3">
+        <div class="w-8 h-8 border-2 border-gray-300 border-t-gray-800 rounded-full animate-spin"></div>
+        <p class="text-sm text-gray-400">Cargando turnos...</p>
+      </div>`;
 
-    const bookings = await getBookings();
+    // Obtener turnos
+    const all = await getBookings();
 
-    if (bookings.length === 0) {
-      bookingsContainer.classList.add("hidden");
-      noBookings.classList.remove("hidden");
-    } else {
-      bookingsContainer.classList.remove("hidden");
-      noBookings.classList.add("hidden");
+    // Auto-eliminar pasados
+    await cleanupPastBookings(all);
 
-      // Sort bookings by date and time
-      bookings.sort((a, b) => {
-        if (a.fecha !== b.fecha) return a.fecha.localeCompare(b.fecha);
-        return a.hora.localeCompare(b.hora);
-      });
+    // Recargar tras limpieza
+    adminAllBookings = (await getBookings());
 
-      bookingsContainer.innerHTML = bookings
-        .map(
-          (b, index) => `
-          <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg" data-index="${index}">
-            <div>
-              <p class="font-medium text-gray-800">${b.servicio}</p>
-              <p class="text-sm text-gray-600">${b.fecha} a las ${b.hora}</p>
-            </div>
-            <button class="remove-booking text-red-600 hover:text-red-700 p-2" data-fecha="${b.fecha}" data-hora="${b.hora}">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          </div>
-        `
-        )
-        .join("");
+    updateAdminStats();
+    renderAdminBookings("all");
 
-      // Add remove listeners
-      bookingsContainer.querySelectorAll(".remove-booking").forEach((btn) => {
-        btn.addEventListener("click", async (e) => {
-          const target = e.currentTarget as HTMLElement;
-          const fecha = target.dataset.fecha || "";
-          const hora = target.dataset.hora || "";
-          if (confirm("¿Eliminar este turno?")) {
-            const success = await removeBooking(fecha, hora);
-            if (success) {
-              showAdminPanel();
-            } else {
-              alert("Error al eliminar el turno");
-            }
-          }
-        });
-      });
-    }
+    // Reset tab UI
+    document.querySelectorAll(".admin-tab").forEach((t) => {
+      const te = t as HTMLElement;
+      te.className = `admin-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${te.dataset.tab === 'all' ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'}`;
+    });
   }
 
   function hideAdminPanel() {
-    const panel = document.getElementById("admin-panel");
-    panel?.classList.add("hidden");
+    document.getElementById("admin-panel")?.classList.add("hidden");
   }
 
   async function handleClearAllBookings() {
-    if (confirm("¿Estás seguro de que quieres eliminar TODOS los turnos?")) {
-      const success = await clearAllBookings();
-      if (success) {
-        hideAdminPanel();
+    if (confirm("¿Eliminar TODOS los turnos futuros?")) {
+      const ok = await clearAllBookings();
+      if (ok) {
+        adminAllBookings = [];
+        updateAdminStats();
+        renderAdminBookings(adminCurrentTab);
       } else {
-        alert("Error al limpiar los turnos");
+        alert("Error al limpiar");
       }
     }
   }
 
-  // Event listeners
+  // ========== EVENT LISTENERS ==========
   document.addEventListener("DOMContentLoaded", () => {
-    // Service card selection
-    document.querySelectorAll(".service-card").forEach((card) => {
-      card.addEventListener("click", () => {
-        const el = card as HTMLElement;
-
-        // Remove previous selection
-        document.querySelectorAll(".service-card").forEach((c) => {
-          (c as HTMLElement).dataset.selected = "false";
-        });
-
-        el.dataset.selected = "true";
-
-        selectedService = {
+    // Botones "+" en las cards de servicio
+    document.querySelectorAll(".service-add-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const el = btn as HTMLElement;
+        addToCart({
           id: el.dataset.serviceId || "",
           name: el.dataset.serviceName || "",
           price: parseInt(el.dataset.servicePrice || "0"),
           duration: el.dataset.serviceDuration || "",
-        };
-
-        showSection("calendar");
+        });
       });
     });
 
-    // Back buttons
-    document.getElementById("back-to-services")?.addEventListener("click", () => {
-      showSection("services");
-    });
-
-    document.getElementById("back-to-calendar")?.addEventListener("click", () => {
+    // Botones del carrito
+    document.getElementById("cart-clear")?.addEventListener("click", clearCart);
+    document.getElementById("cart-checkout")?.addEventListener("click", () => {
+      if (cart.length === 0) return;
+      currentSlotIndex = 0;
+      cartSlots = [];
       showSection("calendar");
     });
 
-    // Confirmation modal
+    // Volver
+    document.getElementById("back-to-services")?.addEventListener("click", () => showSection("services"));
+    document.getElementById("back-to-calendar")?.addEventListener("click", () => {
+      cartSlots = [];
+      currentSlotIndex = 0;
+      showSection("calendar");
+    });
+
+    // Modal
     document.getElementById("cancel-booking")?.addEventListener("click", hideConfirmationModal);
     document.getElementById("confirm-booking")?.addEventListener("click", confirmBooking);
-
-    // Admin panel
-    document.getElementById("open-admin")?.addEventListener("click", showAdminPanel);
-    document.getElementById("close-admin")?.addEventListener("click", hideAdminPanel);
-    document.getElementById("clear-all-bookings")?.addEventListener("click", handleClearAllBookings);
-
-    // Close modals on backdrop click
     document.getElementById("confirmation-modal")?.addEventListener("click", (e) => {
       if (e.target === e.currentTarget) hideConfirmationModal();
     });
 
+    // Admin
+    document.getElementById("open-admin")?.addEventListener("click", showAdminPanel);
+    document.getElementById("close-admin")?.addEventListener("click", hideAdminPanel);
+    document.getElementById("clear-all-bookings")?.addEventListener("click", handleClearAllBookings);
     document.getElementById("admin-panel")?.addEventListener("click", (e) => {
       if (e.target === e.currentTarget) hideAdminPanel();
+    });
+
+    // Admin tabs
+    document.querySelectorAll(".admin-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const tabKey = (tab as HTMLElement).dataset.tab || "all";
+        renderAdminBookings(tabKey);
+      });
     });
   });
 </script>
