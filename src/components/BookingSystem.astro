@@ -3,9 +3,6 @@ import ServiceCard from "./ServiceCard.astro";
 import CalendarPicker from "./CalendarPicker.astro";
 import TimeSlots from "./TimeSlots.astro";
 
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-
 const services = [
   {
     id: "corte-cejas",
@@ -47,7 +44,7 @@ const services = [
 ];
 ---
 
-<section id="servicios" class="w-full max-w-4xl mx-auto px-4 py-8" data-supabase-url={supabaseUrl} data-supabase-key={supabaseKey}>
+<section id="servicios" class="w-full max-w-4xl mx-auto px-4 py-8">
   <div class="text-center mb-8">
     <h2 class="text-3xl font-bold text-gray-800 mb-2">Reserva tu turno</h2>
     <p class="text-gray-600">Agregá uno o más servicios al carrito</p>
@@ -216,13 +213,20 @@ const services = [
 
 
 <script>
-  import { createClient } from '@supabase/supabase-js';
+  import { initializeApp } from 'firebase/app';
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, query, where, onSnapshot } from 'firebase/firestore';
 
-  // ========== SUPABASE SETUP ==========
-  const section = document.getElementById('servicios');
-  const supabaseUrl = section?.dataset.supabaseUrl || '';
-  const supabaseKey = section?.dataset.supabaseKey || '';
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  // ========== FIREBASE SETUP ==========
+  const firebaseConfig = {
+    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
+  };
+  const firebaseApp = initializeApp(firebaseConfig);
+  const db = getFirestore(firebaseApp);
 
   // ========== BOOKING SYSTEM ==========
 
@@ -258,33 +262,42 @@ const services = [
   let selectedDate: Date | null = null;
   let currentSlotIndex: number = 0; // índice del item del carrito al que estamos asignando horario
 
-  // ========== SUPABASE FUNCTIONS ==========
-  async function getBookings(): Promise<Array<{fecha: string; hora: string; servicio: string}>> {
-    const { data, error } = await supabase.from('turnos').select('fecha, hora, servicio');
-    if (error) return [];
-    return data || [];
+  // ========== FIREBASE FUNCTIONS ==========
+  async function getBookings(): Promise<Array<{id: string; fecha: string; hora: string; servicio: string}>> {
+    try {
+      const snapshot = await getDocs(collection(db, 'turnos'));
+      return snapshot.docs.map(d => ({ id: d.id, ...(d.data() as {fecha: string; hora: string; servicio: string}) }));
+    } catch { return []; }
   }
 
   async function saveBooking(fecha: string, hora: string, servicio: string): Promise<boolean> {
-    const { error } = await supabase.from('turnos').insert([{ fecha, hora, servicio }]);
-    return !error;
+    try {
+      await addDoc(collection(db, 'turnos'), { fecha, hora, servicio });
+      return true;
+    } catch { return false; }
   }
 
   async function removeBooking(fecha: string, hora: string): Promise<boolean> {
-    const { error } = await supabase.from('turnos').delete().eq('fecha', fecha).eq('hora', hora);
-    return !error;
+    try {
+      const q = query(collection(db, 'turnos'), where('fecha', '==', fecha), where('hora', '==', hora));
+      const snapshot = await getDocs(q);
+      for (const d of snapshot.docs) await deleteDoc(d.ref);
+      return true;
+    } catch { return false; }
   }
 
   async function clearAllBookings(): Promise<boolean> {
-    const { error } = await supabase.from('turnos').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-    return !error;
+    try {
+      const snapshot = await getDocs(collection(db, 'turnos'));
+      for (const d of snapshot.docs) await deleteDoc(d.ref);
+      return true;
+    } catch { return false; }
   }
 
   // ========== REALTIME ==========
-  supabase.channel('turnos-changes')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'turnos' }, () => {
-      if (selectedDate) renderTimeSlots(selectedDate);
-    }).subscribe();
+  onSnapshot(collection(db, 'turnos'), () => {
+    if (selectedDate) renderTimeSlots(selectedDate);
+  });
 
   // ========== UTILS ==========
   function formatDate(date: Date): string {
@@ -483,10 +496,9 @@ const services = [
     morningContainer.innerHTML = '<div class="col-span-full text-center text-gray-500 py-4">Cargando...</div>';
     afternoonContainer.innerHTML = '';
 
-    const { data: bookedSlots } = await supabase
-      .from('turnos').select('hora').eq('fecha', dateStr);
-
-    const bookedHours = new Set((bookedSlots || []).map((s: {hora: string}) => s.hora));
+    const q = query(collection(db, 'turnos'), where('fecha', '==', dateStr));
+    const snapshot = await getDocs(q);
+    const bookedHours = new Set(snapshot.docs.map(d => d.data().hora as string));
     // También tachar los slots ya asignados a otros servicios del carrito
     const assignedHours = new Set(cartSlots.map(s => s.time));
 
@@ -632,19 +644,30 @@ const services = [
       return;
     }
 
+    // Turno guardado exitosamente — re-renderizar los slots para que se vean tachados
+    if (selectedDate) await renderTimeSlots(selectedDate);
+
     hideConfirmationModal();
     if (confirmBtn) {
       confirmBtn.innerHTML = originalContent;
       confirmBtn.removeAttribute("disabled");
     }
 
-    clearCart();
-    selectedDate = null;
-    currentSlotIndex = 0;
-    cartSlots = [];
-    showSection("services");
+    // Mostrar la vista de horarios con los slots recién tachados antes de abrir WhatsApp
+    showSection("timeslots");
 
-    setTimeout(() => { window.location.href = whatsappUrl; }, 100);
+    // Limpiar estado del carrito pero mantener selectedDate para que onSnapshot siga funcionando
+    cart = [];
+    cartSlots = [];
+    currentSlotIndex = 0;
+    updateCartBar();
+
+    // Abrir WhatsApp después de un breve delay para que el usuario vea el slot tachado
+    setTimeout(() => {
+      selectedDate = null;
+      showSection("services");
+      window.location.href = whatsappUrl;
+    }, 500);
   }
 
   // ========== ADMIN ==========
@@ -653,15 +676,18 @@ const services = [
   let adminAllBookings: Array<{fecha: string; hora: string; servicio: string}> = [];
 
   function getNowArgentina(): { dateStr: string; timeStr: string } {
-    // Argentina = UTC-3 (no DST)
+    // Argentina = UTC-3 (no DST) — usamos Intl para obtener la hora local correcta
     const now = new Date();
-    const ar = new Date(now.getTime() - 3 * 60 * 60 * 1000);
-    const y = ar.getUTCFullYear();
-    const m = String(ar.getUTCMonth() + 1).padStart(2, '0');
-    const d = String(ar.getUTCDate()).padStart(2, '0');
-    const h = String(ar.getUTCHours()).padStart(2, '0');
-    const min = String(ar.getUTCMinutes()).padStart(2, '0');
-    return { dateStr: `${y}-${m}-${d}`, timeStr: `${h}:${min}` };
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Argentina/Buenos_Aires',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hour12: false,
+    }).formatToParts(now);
+    const get = (type: string) => parts.find(p => p.type === type)?.value || '00';
+    return {
+      dateStr: `${get('year')}-${get('month')}-${get('day')}`,
+      timeStr: `${get('hour')}:${get('minute')}`,
+    };
   }
 
   function isBookingPast(fecha: string, hora: string): boolean {
@@ -671,12 +697,8 @@ const services = [
     return false;
   }
 
-  async function cleanupPastBookings(bookings: Array<{fecha: string; hora: string; servicio: string}>) {
-    const past = bookings.filter(b => isBookingPast(b.fecha, b.hora));
-    for (const b of past) {
-      await removeBooking(b.fecha, b.hora);
-    }
-    return past.length;
+  function filterOutPastBookings(bookings: Array<{fecha: string; hora: string; servicio: string}>) {
+    return bookings.filter(b => !isBookingPast(b.fecha, b.hora));
   }
 
   function getTodayStr(): string {
@@ -850,14 +872,10 @@ const services = [
         <p class="text-sm text-gray-400">Cargando turnos...</p>
       </div>`;
 
-    // Obtener turnos
+    // Obtener turnos — filtrar solo los de días anteriores, los de hoy se muestran siempre
     const all = await getBookings();
-
-    // Auto-eliminar pasados
-    await cleanupPastBookings(all);
-
-    // Recargar tras limpieza
-    adminAllBookings = (await getBookings());
+    const { dateStr: todayStr } = getNowArgentina();
+    adminAllBookings = all.filter(b => b.fecha >= todayStr);
 
     updateAdminStats();
     renderAdminBookings("all");
