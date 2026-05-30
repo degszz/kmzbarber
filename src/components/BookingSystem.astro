@@ -310,8 +310,23 @@ const services = [
     } catch { return false; }
   }
 
-  // ========== REALTIME ==========
-  onSnapshot(collection(db, 'turnos'), () => {
+  // ========== REALTIME + CACHE ==========
+  // Cache local de todos los turnos para evitar queries en cada interacción
+  let bookingsCache: Array<{id: string; fecha: string; hora: string; servicio: string}> = [];
+  let cacheReady = false;
+
+  onSnapshot(collection(db, 'turnos'), (snapshot) => {
+    bookingsCache = snapshot.docs.map(d => {
+      const data = d.data() as any;
+      return {
+        id: d.id,
+        fecha: data.fecha || '',
+        hora: data.hora || '',
+        servicio: data.servicio || 'Sin servicio',
+      };
+    });
+    cacheReady = true;
+    // Re-renderizar si estamos viendo time slots
     if (selectedDate) renderTimeSlots(selectedDate);
   });
 
@@ -529,13 +544,23 @@ const services = [
     if (dateDisplay) dateDisplay.textContent = formatDate(date);
 
     const dateStr = formatDateStorage(date);
-    morningContainer.innerHTML = '<div class="col-span-full text-center text-gray-500 py-4">Cargando...</div>';
-    afternoonContainer.innerHTML = '';
 
-    const q = query(collection(db, 'turnos'), where('fecha', '==', dateStr));
-    const snapshot = await getDocs(q);
-    const bookedHours = new Set(snapshot.docs.map(d => d.data().hora as string));
-    // También tachar los slots ya asignados a otros servicios del carrito
+    // Si el cache no está listo todavía, mostrar loading muy breve
+    if (!cacheReady) {
+      morningContainer.innerHTML = '<div class="col-span-full text-center text-gray-500 py-2">Cargando...</div>';
+      afternoonContainer.innerHTML = '';
+      // Esperar a que el snapshot inicial llegue
+      let waited = 0;
+      while (!cacheReady && waited < 3000) {
+        await new Promise(r => setTimeout(r, 50));
+        waited += 50;
+      }
+    }
+
+    // Filtrar del cache local — instantáneo, sin red
+    const bookedHours = new Set(
+      bookingsCache.filter(b => b.fecha === dateStr).map(b => b.hora)
+    );
     const assignedHours = new Set(cartSlots.map(s => s.time));
 
     morningContainer.innerHTML = "";
@@ -672,15 +697,30 @@ const services = [
       confirmBtn.setAttribute("disabled", "true");
     }
 
-    // Guardar todos los turnos en Supabase
+    // Abrir WhatsApp INMEDIATAMENTE en una nueva pestaña (no bloquear por el guardado)
+    const whatsappWindow = window.open(whatsappUrl, '_blank');
+
+    // Optimistic UI: agregar los turnos al cache local YA para que se vean tachados al instante
     const allServices = cart.map(item => item.name).join(" + ");
-    let allOk = true;
-    for (const slot of cartSlots) {
-      const ok = await saveBooking(dateStr, slot.time, cart[slot.serviceIndex]?.name || allServices);
-      if (!ok) { allOk = false; break; }
-    }
+    const newBookings = cartSlots.map(slot => ({
+      id: `optimistic-${Date.now()}-${slot.time}`,
+      fecha: dateStr,
+      hora: slot.time,
+      servicio: cart[slot.serviceIndex]?.name || allServices,
+    }));
+    bookingsCache = [...bookingsCache, ...newBookings];
+
+    // Guardar todos los turnos en PARALELO (mucho más rápido que secuencial)
+    const results = await Promise.all(
+      cartSlots.map(slot =>
+        saveBooking(dateStr, slot.time, cart[slot.serviceIndex]?.name || allServices)
+      )
+    );
+    const allOk = results.every(Boolean);
 
     if (!allOk) {
+      // Revertir optimistic update
+      bookingsCache = bookingsCache.filter(b => !b.id.startsWith('optimistic-'));
       alert("Error al guardar el turno. Intenta de nuevo.");
       if (confirmBtn) {
         confirmBtn.innerHTML = originalContent;
@@ -689,30 +729,24 @@ const services = [
       return;
     }
 
-    // Turno guardado exitosamente — re-renderizar los slots para que se vean tachados
-    if (selectedDate) await renderTimeSlots(selectedDate);
-
     hideConfirmationModal();
     if (confirmBtn) {
       confirmBtn.innerHTML = originalContent;
       confirmBtn.removeAttribute("disabled");
     }
 
-    // Mostrar la vista de horarios con los slots recién tachados antes de abrir WhatsApp
-    showSection("timeslots");
-
-    // Limpiar estado del carrito pero mantener selectedDate para que onSnapshot siga funcionando
+    // Limpiar estado y volver a servicios
     cart = [];
     cartSlots = [];
     currentSlotIndex = 0;
+    selectedDate = null;
     updateCartBar();
+    showSection("services");
 
-    // Abrir WhatsApp después de un breve delay para que el usuario vea el slot tachado
-    setTimeout(() => {
-      selectedDate = null;
-      showSection("services");
+    // Fallback: si el popup fue bloqueado, redirigir en la misma pestaña
+    if (!whatsappWindow || whatsappWindow.closed) {
       window.location.href = whatsappUrl;
-    }, 500);
+    }
   }
 
   // ========== ADMIN ==========
