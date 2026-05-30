@@ -268,8 +268,22 @@ const services = [
   async function getBookings(): Promise<Array<{id: string; fecha: string; hora: string; servicio: string}>> {
     try {
       const snapshot = await getDocs(collection(db, 'turnos'));
-      return snapshot.docs.map(d => ({ id: d.id, ...(d.data() as {fecha: string; hora: string; servicio: string}) }));
-    } catch { return []; }
+      const result = snapshot.docs.map(d => {
+        const data = d.data() as any;
+        return {
+          id: d.id,
+          fecha: data.fecha || '',
+          hora: data.hora || '',
+          servicio: data.servicio || 'Sin servicio',
+        };
+      });
+      console.log('[KMZ] getBookings devolvió:', result.length, 'turnos', result);
+      return result;
+    } catch (err) {
+      console.error('[KMZ] Error al obtener turnos:', err);
+      alert('Error al cargar turnos: ' + (err as Error).message);
+      return [];
+    }
   }
 
   async function saveBooking(fecha: string, hora: string, servicio: string): Promise<boolean> {
@@ -903,10 +917,10 @@ const services = [
         <p class="text-sm text-gray-400">Cargando turnos...</p>
       </div>`;
 
-    // Obtener turnos — filtrar solo los de días anteriores, los de hoy se muestran siempre
+    // Obtener TODOS los turnos sin filtrar — el admin ve todo
     const all = await getBookings();
-    const { dateStr: todayStr } = getNowArgentina();
-    adminAllBookings = all.filter(b => b.fecha >= todayStr);
+    console.log('[Admin] Cargando panel con', all.length, 'turnos totales');
+    adminAllBookings = all;
 
     updateAdminStats();
     renderAdminBookings("all");
