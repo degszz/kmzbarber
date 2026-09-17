@@ -21,6 +21,15 @@ import "../styles/global.css";
 				<div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000">
 					<img src="/3.avif" alt="KMZ Studio 3" class="w-full h-full object-cover object-center" />
 				</div>
+				<div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000">
+					<img src="/4.avif" alt="KMZ Studio 4" class="w-full h-full object-cover object-center" />
+				</div>
+				<div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 bg-black">
+					<video src="/5.mp4" class="w-full h-full object-cover object-center" muted loop playsinline preload="metadata"></video>
+				</div>
+				<div class="carousel-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 bg-black">
+					<video src="/6.mp4" class="w-full h-full object-cover object-center" muted loop playsinline preload="metadata"></video>
+				</div>
 			</div>
 
 			<!-- Overlay oscuro con blur -->
@@ -145,6 +154,9 @@ import "../styles/global.css";
 				<button class="carousel-dot w-3 h-3 rounded-full bg-white/80 transition-all duration-300" data-index="0"></button>
 				<button class="carousel-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300" data-index="1"></button>
 				<button class="carousel-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300" data-index="2"></button>
+				<button class="carousel-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300" data-index="3"></button>
+				<button class="carousel-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300" data-index="4"></button>
+				<button class="carousel-dot w-3 h-3 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-300" data-index="5"></button>
 			</div>
 
 			<!-- Flecha para bajar -->
@@ -166,6 +178,14 @@ import "../styles/global.css";
 				function showSlide(index: number) {
 					slides.forEach((slide, i) => {
 						(slide as HTMLElement).style.opacity = i === index ? '1' : '0';
+						const video = slide.querySelector('video');
+						if (video) {
+							if (i === index) {
+								video.play().catch(() => {});
+							} else {
+								video.pause();
+							}
+						}
 					});
 					dots.forEach((dot, i) => {
 						dot.classList.toggle('bg-white/80', i === index);
@@ -235,7 +255,7 @@ import "../styles/global.css";
 				class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4"
 			>
 				<a
-					href="https://www.google.com/maps/place/35%C2%B026'32.4%22S+58%C2%B047'53.3%22W/@-35.4423256,-58.7981339,17z"
+					href="https://www.google.com/maps/@-35.4423754,-58.7983077,3a,48.9y,26.51h,91.52t/data=!3m7!1e1!3m5!1sVhcHyz2AlWSe9M2TKjwy9w!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-1.5213088619207866%26panoid%3DVhcHyz2AlWSe9M2TKjwy9w%26yaw%3D26.507028237100684!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MDkxNC4wIKXMDSoASAFQAw%3D%3D"
 					target="_blank"
 					class="inline-flex items-center gap-2 px-6 py-3
 						bg-gray-800 hover:bg-gray-700
